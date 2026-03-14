@@ -32,9 +32,21 @@ export const problemPoints = [
 ]
 
 export const workflowSteps = [
-  'A new version is published',
-  'Every member instantly receives the update',
-  'Previous versions can be restored anytime',
+  {
+    label: 'Publish',
+    title: 'A new version is published',
+    detail: 'A leader updates the trusted chart or arrangement once.',
+  },
+  {
+    label: 'Sync',
+    title: 'Every member instantly receives the update',
+    detail: 'The current version reaches the group without manual chasing.',
+  },
+  {
+    label: 'Restore',
+    title: 'Previous versions can be restored anytime',
+    detail: 'If a change does not land, the band can revert with confidence.',
+  },
 ]
 
 export const suiteCards: PreviewCard[] = [
@@ -90,7 +102,7 @@ export const suiteCards: PreviewCard[] = [
 
 export const chordIntelligenceCards: PreviewCard[] = [
   {
-    title: 'Chord Library (Guitar & Piano voicings)',
+    title: 'Chord Library\n(Guitar & Piano voicings)',
     body: 'Reference practical shapes and voicings that stay tied to the songs you actually use.',
     bullets: [
       'Browse voicings quickly',
@@ -99,7 +111,7 @@ export const chordIntelligenceCards: PreviewCard[] = [
     ],
   },
   {
-    title: 'Theory helpers (formulas + compatible scales)',
+    title: 'Theory helpers\n(formulas + compatible scales)',
     body: 'Get just enough harmonic context to make better rehearsal and arrangement decisions.',
     bullets: [
       'Chord formulas at a glance',
@@ -108,7 +120,7 @@ export const chordIntelligenceCards: PreviewCard[] = [
     ],
   },
   {
-    title: 'Song usage intelligence (where you use this chord)',
+    title: 'Song usage intelligence\n(where you use this chord)',
     body: 'Understand how harmony appears across your actual library, not just in isolation.',
     bullets: [
       'See usage in real songs',
@@ -120,14 +132,17 @@ export const chordIntelligenceCards: PreviewCard[] = [
 
 export const featurePillars = [
   {
+    label: 'Certainty',
     title: 'Version certainty',
     copy: 'One trusted chart, one clear publish action, and far less second-guessing before rehearsal starts.',
   },
   {
+    label: 'Workflow',
     title: 'Rehearsal-to-stage workflow',
     copy: 'The same system supports editing, planning, and live performance instead of forcing musicians across disconnected tools.',
   },
   {
+    label: 'Coordination',
     title: 'Cross-device coordination',
     copy: 'Bands with mixed devices still stay aligned because the workflow is synchronized where it matters most.',
   },

@@ -337,11 +337,15 @@ function LandingPage() {
               <h2 className="bs-section-title">Publish once. Everyone stays aligned.</h2>
               <p className="bs-section-copy">BandSong keeps one trusted version of every song. When you update a chart or arrangement, your group stays synchronized across devices — with the confidence to rehearse and perform without version guessing.</p>
             </div>
-            <div className="bs-row bs-row-3">
+            <div className="bs-workflow-flow" aria-label="BandSong workflow">
               {workflowSteps.map((step, index) => (
-                <article key={step} className="bs-card bs-card-pad bs-feature bs-card-step">
-                  <span className="bs-panel-label">0{index + 1}</span>
-                  <h3 className="bs-feature-title">{step}</h3>
+                <article key={step.title} className="bs-card bs-card-pad bs-feature bs-workflow-step">
+                  <div className="bs-workflow-step-head">
+                    <span className="bs-workflow-step-number">0{index + 1}</span>
+                    <span className="bs-panel-label bs-panel-label-accent">{step.label}</span>
+                  </div>
+                  <h3 className="bs-feature-title">{step.title}</h3>
+                  <p className="bs-feature-copy">{step.detail}</p>
                 </article>
               ))}
             </div>
@@ -377,7 +381,7 @@ function LandingPage() {
                     </div>
                     <div className="bs-card bs-card-pad bs-feature bs-showcase-card bs-suite-copy-card">
                       <div className="bs-showcase-copy">
-                        <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
+                        <h3 className="bs-feature-title bs-showcase-card-title">{card.title.split("\n").map((line) => (<span key={line} className="bs-title-line">{line}</span>))}</h3>
                         <p className="bs-feature-copy">{card.body}</p>
                         <ul className="bs-list-clean bs-showcase-stack" aria-label={`${card.title} capabilities`}>
                           {card.bullets.map((bullet) => (
@@ -404,8 +408,8 @@ function LandingPage() {
             </div>
             <div className="bs-row bs-row-3">
               {chordIntelligenceCards.map((card) => (
-                <article key={card.title} className="bs-card bs-card-pad bs-feature bs-elevated-card">
-                  <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
+                <article key={card.title} className="bs-card bs-card-pad bs-feature bs-elevated-card bs-song-intelligence-card">
+                  <h3 className="bs-feature-title bs-showcase-card-title">{card.title.split("\n").map((line) => (<span key={line} className="bs-title-line">{line}</span>))}</h3>
                   <p className="bs-feature-copy">{card.body}</p>
                   <ul className="bs-list-clean bs-showcase-stack" aria-label={`${card.title} details`}>
                     {card.bullets.map((bullet) => (
@@ -426,21 +430,41 @@ function LandingPage() {
               <span className="bs-panel-label">Appearance & Readability</span>
               <h2 className="bs-section-title" id="appearance-title">Readable on stage. Comfortable in rehearsal.</h2>
               <p className="bs-section-copy">Customize reading and layout so the Viewer works under stage lighting and personal preference.</p>
+              <div className="bs-badge-row bs-badge-row-tight bs-appearance-badges">
+                <span className="bs-code-chip">Stage-friendly</span>
+                <span className="bs-code-chip">Customizable</span>
+                <span className="bs-code-chip">Calm UI</span>
+              </div>
             </div>
             <div className="bs-appearance-layout">
               <div className="bs-card bs-card-pad bs-showcase-stack bs-appearance-copy-card">
-                <div className="bs-badge-row">
-                  <span className="bs-code-chip">Stage-friendly</span>
-                  <span className="bs-code-chip">Customizable</span>
-                  <span className="bs-code-chip">Calm UI</span>
+                <div className="bs-appearance-intro">
+                  <span className="bs-panel-label">Viewer controls</span>
+                  <p className="bs-feature-copy">The reading surface stays calm, but musicians still get the controls they need to make it legible fast.</p>
                 </div>
-                <ul className="bs-list-clean bs-showcase-stack" aria-label="Readability controls">
-                  <li className="bs-problem-item"><span>Theme selection + accent color system</span></li>
-                  <li className="bs-problem-item"><span>Chord rendering styles</span></li>
-                  <li className="bs-problem-item"><span>Viewer readability + layout controls</span></li>
-                </ul>
+                <div className="bs-appearance-feature-grid" aria-label="Readability controls">
+                  <article className="bs-appearance-feature">
+                    <span className="bs-workflow-step-number">01</span>
+                    <h3 className="bs-feature-title">Theme + accent system</h3>
+                    <p className="bs-feature-copy">Choose the overall feel and contrast profile that fits the room.</p>
+                  </article>
+                  <article className="bs-appearance-feature">
+                    <span className="bs-workflow-step-number">02</span>
+                    <h3 className="bs-feature-title">Chord rendering styles</h3>
+                    <p className="bs-feature-copy">Adjust how chords are presented so players read them faster.</p>
+                  </article>
+                  <article className="bs-appearance-feature">
+                    <span className="bs-workflow-step-number">03</span>
+                    <h3 className="bs-feature-title">Readability + layout controls</h3>
+                    <p className="bs-feature-copy">Dial in spacing, density, and layout for rehearsal or stage use.</p>
+                  </article>
+                </div>
               </div>
               <aside className="bs-card bs-card-pad bs-showcase-stack bs-appearance-preview-card" aria-label="Viewer readability preview">
+                <div className="bs-appearance-preview-head">
+                  <span className="bs-panel-label bs-panel-label-accent">Stage preview</span>
+                  <p className="bs-feature-copy">Tune the viewer for dark rooms, bright stages, and different reading preferences.</p>
+                </div>
                 <PreviewFrame
                   src="/ScreenGrabs/BandSong Suite - Settings_WebP.webp"
                   alt="BandSong Suite appearance and settings screen"
@@ -480,10 +504,14 @@ function LandingPage() {
               <span className="bs-panel-label">Why it matters</span>
               <h2 className="bs-section-title" id="pillars-title">The workflow stays calm because the system stays clear.</h2>
             </div>
-            <div className="bs-feature-grid">
-              {featurePillars.map((feature) => (
-                <article key={feature.title} className="bs-card bs-card-pad bs-feature bs-elevated-card">
-                  <h3 className="bs-feature-title bs-showcase-card-title">{feature.title}</h3>
+            <div className="bs-workflow-flow bs-pillars-flow" aria-label="Why it matters">
+              {featurePillars.map((feature, index) => (
+                <article key={feature.title} className="bs-card bs-card-pad bs-feature bs-workflow-step bs-pillars-step">
+                  <div className="bs-workflow-step-head">
+                    <span className="bs-workflow-step-number">0{index + 1}</span>
+                    <span className="bs-panel-label bs-panel-label-accent">{feature.label}</span>
+                  </div>
+                  <h3 className="bs-feature-title">{feature.title}</h3>
                   <p className="bs-feature-copy">{feature.copy}</p>
                 </article>
               ))}
