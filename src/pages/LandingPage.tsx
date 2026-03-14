@@ -301,26 +301,36 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section" aria-labelledby="problem-title"> 
+        <section className="bs-section" aria-labelledby="problem-title">
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Reality check</span>
               <h2 className="bs-section-title" id="problem-title">Rehearsal chaos is predictable.</h2>
             </div>
-            <div className="bs-card bs-card-pad bs-showcase-stack">
-              <ul className="bs-list-clean bs-showcase-stack" aria-label="Common rehearsal problems">
-                {problemPoints.map((point) => (
-                  <li key={point} className="bs-problem-item">
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-              <p className="bs-feature-copy bs-problem-close">BandSong makes your repertoire feel controlled.</p>
+            <div className="bs-problem-layout">
+              <div className="bs-card bs-card-pad bs-problem-list-card">
+                <ul className="bs-list-clean bs-showcase-stack" aria-label="Common rehearsal problems">
+                  {problemPoints.map((point) => (
+                    <li key={point} className="bs-problem-item">
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <aside className="bs-card bs-card-pad bs-problem-outcome" aria-label="BandSong outcome">
+                <span className="bs-panel-label bs-panel-label-accent">Control</span>
+                <p className="bs-problem-close">BandSong makes your repertoire feel controlled.</p>
+                <div className="bs-problem-payoffs">
+                  <p className="bs-feature-copy">One trusted chart for the band.</p>
+                  <p className="bs-feature-copy">One clear publish action when things change.</p>
+                  <p className="bs-feature-copy">One calmer rehearsal before the downbeat.</p>
+                </div>
+              </aside>
             </div>
           </div>
         </section>
 
-        <section className="bs-section" id="how-it-works">
+        <section className="bs-section" id="how-it-works"> 
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Workflow</span>
@@ -664,6 +674,8 @@ function LandingPage() {
 }
 
 export default LandingPage
+
+
 
 
 

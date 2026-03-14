@@ -676,3 +676,126 @@ body {
 
 
 
+
+.bs-panel-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 0.72rem;
+  letter-spacing: 0.3em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.bs-panel-label-accent {
+  color: var(--accent-fill);
+}
+
+.bs-section-head {
+  justify-items: center;
+  text-align: center;
+}
+
+.bs-section-title,
+.bs-section-copy {
+  text-align: center;
+}
+
+.bs-section-copy {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.bs-problem-item {
+  padding: 0.95rem 0;
+  text-align: center;
+}
+
+.bs-problem-close {
+  text-align: center;
+}
+
+section[aria-labelledby="problem-title"] .bs-card {
+  max-width: min(100%, 74rem);
+  margin: 0 auto;
+  padding: 1.4rem 1.5rem;
+}
+
+section[aria-labelledby="problem-title"] .bs-list-clean {
+  width: min(100%, 62rem);
+  margin: 0 auto;
+}
+
+.bs-problem-close {
+  color: var(--accent-fill);
+}
+
+.bs-problem-layout {
+  display: grid;
+  gap: 1.2rem;
+  align-items: stretch;
+  max-width: min(100%, 76rem);
+  margin: 0 auto;
+}
+
+.bs-problem-list-card {
+  padding: 1.5rem 1.6rem;
+}
+
+.bs-problem-outcome {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  padding: 1.5rem 1.6rem;
+  border-color: color-mix(in srgb, var(--accent-fill) 34%, var(--border) 66%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 24%, var(--panel) 76%), var(--panel)),
+    var(--panel);
+}
+
+.bs-problem-outcome .bs-panel-label {
+  justify-self: start;
+}
+
+.bs-problem-close {
+  margin: 0;
+  color: var(--accent-fill);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-align: left;
+}
+
+.bs-problem-payoffs {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.bs-problem-payoffs .bs-feature-copy {
+  margin: 0;
+  padding-top: 0.8rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 84%, transparent);
+  text-align: left;
+}
+
+section[aria-labelledby="problem-title"] .bs-list-clean {
+  width: 100%;
+  margin: 0;
+}
+
+section[aria-labelledby="problem-title"] .bs-problem-item {
+  text-align: left;
+}
+
+@media (min-width: 900px) {
+  .bs-problem-layout {
+    grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+  }
+}
