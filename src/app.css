@@ -365,6 +365,7 @@ body {
 .bs-gallery-slider-head,
 .bs-gallery-stage .bs-preview-shell {
   width: min(100%, 70rem);
+  max-width: min(100%, 70rem);
   margin: 0 auto;
 }
 
@@ -721,38 +722,32 @@ body {
   text-align: center;
 }
 
-section[aria-labelledby="problem-title"] .bs-card {
-  max-width: min(100%, 74rem);
-  margin: 0 auto;
-  padding: 1.4rem 1.5rem;
-}
-
-section[aria-labelledby="problem-title"] .bs-list-clean {
-  width: min(100%, 62rem);
-  margin: 0 auto;
-}
-
-.bs-problem-close {
-  color: var(--accent-fill);
-}
-
 .bs-problem-layout {
   display: grid;
-  gap: 1.2rem;
+  gap: 0.8rem;
   align-items: stretch;
-  max-width: min(100%, 76rem);
+  width: 100%;
+  max-width: min(100%, 70rem);
   margin: 0 auto;
+}
+
+.bs-problem-list-card,
+.bs-problem-outcome {
+  width: 100%;
+  margin: 0;
+  min-width: 0;
+  padding: 1.5rem 1.6rem;
 }
 
 .bs-problem-list-card {
-  padding: 1.5rem 1.6rem;
+  justify-self: stretch;
 }
 
 .bs-problem-outcome {
   display: grid;
   align-content: start;
+  justify-self: stretch;
   gap: 1rem;
-  padding: 1.5rem 1.6rem;
   border-color: color-mix(in srgb, var(--accent-fill) 34%, var(--border) 66%);
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 24%, var(--panel) 76%), var(--panel)),
@@ -796,6 +791,11 @@ section[aria-labelledby="problem-title"] .bs-problem-item {
 
 @media (min-width: 900px) {
   .bs-problem-layout {
-    grid-template-columns: minmax(0, 1.35fr) minmax(260px, 0.65fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+
+
+
+
