@@ -39,6 +39,18 @@ export const workflowSteps = [
 
 export const suiteCards: PreviewCard[] = [
   {
+    title: 'Repertoire Control (Table View)',
+    body: 'Scan your full library, compare readiness, and decide what to rehearse next.',
+    bullets: [
+      'Statuses + tags for fast decisions',
+      'Jump into edit or setlist instantly',
+      'Find rehearsal priorities quickly',
+    ],
+    previewLabel: 'Table',
+    previewSrc: '/ScreenGrabs/BandSong Suite - Table_WebP.webp',
+    previewAlt: 'BandSong Suite repertoire table screen',
+  },
+  {
     title: 'Song Editor',
     body: 'Write and maintain trusted charts with sections, chords, lyrics, notes, and rehearsal status.',
     bullets: [
@@ -49,18 +61,6 @@ export const suiteCards: PreviewCard[] = [
     previewLabel: 'Editor',
     previewSrc: '/ScreenGrabs/BandSong Suite - Editor_WebP.webp',
     previewAlt: 'BandSong Suite song editor screen',
-  },
-  {
-    title: 'Viewer (Live Mode)',
-    body: 'A minimal, stage-ready surface that shows only what musicians need while playing.',
-    bullets: [
-      'Clean chord + lyric display',
-      'Setlist navigation + section awareness',
-      'Live mode optimized for performance',
-    ],
-    previewLabel: 'Viewer',
-    previewSrc: '/ScreenGrabs/BandSong Suite - Viewer Live_WebP.webp',
-    previewAlt: 'BandSong Suite live viewer screen',
   },
   {
     title: 'Setlist Builder',
@@ -75,16 +75,16 @@ export const suiteCards: PreviewCard[] = [
     previewAlt: 'BandSong Suite setlist builder screen',
   },
   {
-    title: 'Repertoire Control (Table View)',
-    body: 'Scan your full library, compare readiness, and decide what to rehearse next.',
+    title: 'Viewer (Live Mode)',
+    body: 'A minimal, stage-ready surface that shows only what musicians need while playing.',
     bullets: [
-      'Statuses + tags for fast decisions',
-      'Jump into edit or setlist instantly',
-      'Find rehearsal priorities quickly',
+      'Clean chord + lyric display',
+      'Setlist navigation + section awareness',
+      'Live mode optimized for performance',
     ],
-    previewLabel: 'Table',
-    previewSrc: '/ScreenGrabs/BandSong Suite - Table_WebP.webp',
-    previewAlt: 'BandSong Suite repertoire table screen',
+    previewLabel: 'Viewer',
+    previewSrc: '/ScreenGrabs/BandSong Suite - Viewer Live_WebP.webp',
+    previewAlt: 'BandSong Suite live viewer screen',
   },
 ]
 
@@ -136,16 +136,16 @@ export const featurePillars = [
 export const importExportCards: PreviewCard[] = [
   {
     title: 'ChordPro import (smart parsing)',
-    body: 'Paste or upload ChordPro and BandSong parses sections, lyrics, and chord lines into a clean, editable song. Common quirks are handled gracefully — inconsistent spacing, repeated section labels, and inline chords.',
+    body: 'Paste or upload ChordPro and BandSong parses sections, lyrics, and chord lines into a clean, editable song. Common quirks are handled gracefully ï¿½ inconsistent spacing, repeated section labels, and inline chords.',
     bullets: [
       'Understands standard ChordPro directives (titles, sections, comments)',
       'Normalizes spacing so chords align consistently',
-      'Keeps your original text intact — no lock-in formatting',
+      'Keeps your original text intact ï¿½ no lock-in formatting',
     ],
   },
   {
     title: 'PDF import wizard (guided cleanup)',
-    body: 'Have chord charts stuck in PDFs? Use a guided import flow to extract text, map sections, and review chords before saving. Guided review before saving — nothing is auto-published.',
+    body: 'Have chord charts stuck in PDFs? Use a guided import flow to extract text, map sections, and review chords before saving. Guided review before saving ï¿½ nothing is auto-published.',
     bullets: [
       'Step-by-step extraction and cleanup',
       'Review screen before saving',

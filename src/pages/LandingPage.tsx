@@ -268,7 +268,7 @@ function LandingPage() {
                 <span className="bs-hero-line">Every time.</span>
               </h1>
               <p className="bs-lead bs-lead-hero bs-hero-lead">
-                BandSong Suite is the musician workflow system for rehearsals and live performance. Edit songs, plan setlists, and perform from a calm stage-ready viewer — synced across devices.
+                BandSong Suite is the musician workflow system for rehearsals and live performance. Edit songs, plan setlists, and perform from a calm stage-ready viewer â€” synced across devices.
               </p>
               <p className="bs-feature-copy bs-hero-note">Songs come first. Calm tools beat feature overload.</p>
               <div className="bs-action-row bs-hero-actions">
@@ -335,7 +335,7 @@ function LandingPage() {
             <div className="bs-section-head">
               <span className="bs-panel-label">Workflow</span>
               <h2 className="bs-section-title">Publish once. Everyone stays aligned.</h2>
-              <p className="bs-section-copy">BandSong keeps one trusted version of every song. When you update a chart or arrangement, your group stays synchronized across devices — with the confidence to rehearse and perform without version guessing.</p>
+              <p className="bs-section-copy">BandSong keeps one trusted version of every song. When you update a chart or arrangement, your group stays synchronized across devices â€” with the confidence to rehearse and perform without version guessing.</p>
             </div>
             <div className="bs-row bs-row-3">
               {workflowSteps.map((step, index) => (
@@ -353,36 +353,41 @@ function LandingPage() {
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Product proof</span>
-              <h2 className="bs-section-title" id="suite-title">A complete workflow — not just a chord viewer.</h2>
+              <h2 className="bs-section-title" id="suite-title">A complete workflow - not just a chord viewer.</h2>
             </div>
-            <div className="bs-feature-grid bs-suite-grid">
-              {suiteCards.map((card) => {
+            <div className="bs-suite-rows">
+              {suiteCards.map((card, index) => {
                 const previewSrc = card.previewSrc
+                const imageFirst = index % 2 === 0
 
                 return (
-                  <article key={card.title} className="bs-card bs-card-pad bs-feature bs-showcase-card">
-                    <div className="bs-showcase-copy">
-                      <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
-                      <p className="bs-feature-copy">{card.body}</p>
-                      <ul className="bs-list-clean bs-showcase-stack" aria-label={`${card.title} capabilities`}>
-                        {card.bullets.map((bullet) => (
-                          <li key={bullet} className="bs-problem-item">
-                            <span>{bullet}</span>
-                          </li>
-                        ))}
-                      </ul>
+                  <article key={card.title} className={`bs-suite-row${imageFirst ? ' is-image-first' : ' is-image-last'}`}>
+                    <div className="bs-suite-media">
+                      <PreviewFrame
+                        variant="card"
+                        src={previewSrc}
+                        alt={card.previewAlt ?? card.title}
+                        label={card.previewLabel}
+                        onOpen={
+                          previewSrc
+                            ? () => openViewer(previewSrc, card.previewAlt ?? card.title, card.previewLabel ?? card.title)
+                            : undefined
+                        }
+                      />
                     </div>
-                    <PreviewFrame
-                      variant="card"
-                      src={previewSrc}
-                      alt={card.previewAlt ?? card.title}
-                      label={card.previewLabel}
-                      onOpen={
-                        previewSrc
-                          ? () => openViewer(previewSrc, card.previewAlt ?? card.title, card.previewLabel ?? card.title)
-                          : undefined
-                      }
-                    />
+                    <div className="bs-card bs-card-pad bs-feature bs-showcase-card bs-suite-copy-card">
+                      <div className="bs-showcase-copy">
+                        <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
+                        <p className="bs-feature-copy">{card.body}</p>
+                        <ul className="bs-list-clean bs-showcase-stack" aria-label={`${card.title} capabilities`}>
+                          {card.bullets.map((bullet) => (
+                            <li key={bullet} className="bs-problem-item">
+                              <span>{bullet}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   </article>
                 )
               })}
@@ -395,7 +400,7 @@ function LandingPage() {
             <div className="bs-section-head">
               <span className="bs-panel-label">Song intelligence</span>
               <h2 className="bs-section-title" id="chord-intelligence-title">Chord intelligence, connected to your actual songs.</h2>
-              <p className="bs-section-copy">Explore voicings and harmony in context — not as isolated theory. BandSong links chord tools directly to the songs and setlists you are working on.</p>
+              <p className="bs-section-copy">Explore voicings and harmony in context â€” not as isolated theory. BandSong links chord tools directly to the songs and setlists you are working on.</p>
             </div>
             <div className="bs-row bs-row-3">
               {chordIntelligenceCards.map((card) => (
@@ -422,8 +427,8 @@ function LandingPage() {
               <h2 className="bs-section-title" id="appearance-title">Readable on stage. Comfortable in rehearsal.</h2>
               <p className="bs-section-copy">Customize reading and layout so the Viewer works under stage lighting and personal preference.</p>
             </div>
-            <div className="bs-row bs-appearance-layout">
-              <div className="bs-card bs-card-pad bs-showcase-stack">
+            <div className="bs-appearance-layout">
+              <div className="bs-card bs-card-pad bs-showcase-stack bs-appearance-copy-card">
                 <div className="bs-badge-row">
                   <span className="bs-code-chip">Stage-friendly</span>
                   <span className="bs-code-chip">Customizable</span>
@@ -435,7 +440,7 @@ function LandingPage() {
                   <li className="bs-problem-item"><span>Viewer readability + layout controls</span></li>
                 </ul>
               </div>
-              <aside className="bs-showcase-stack" aria-label="Viewer readability preview">
+              <aside className="bs-card bs-card-pad bs-showcase-stack bs-appearance-preview-card" aria-label="Viewer readability preview">
                 <PreviewFrame
                   src="/ScreenGrabs/BandSong Suite - Settings_WebP.webp"
                   alt="BandSong Suite appearance and settings screen"
@@ -458,7 +463,7 @@ function LandingPage() {
             <div className="bs-section-head">
               <span className="bs-panel-label">Trust</span>
               <h2 className="bs-section-title" id="trust-title">Designed for real bands.</h2>
-              <p className="bs-section-copy">BandSong was built inside a working band — mixed skill levels, different instruments, different devices, and real rehearsal constraints. The interface stays calm, content-first, and performance safe.</p>
+              <p className="bs-section-copy">BandSong was built inside a working band â€” mixed skill levels, different instruments, different devices, and real rehearsal constraints. The interface stays calm, content-first, and performance safe.</p>
               <p className="bs-feature-copy">Offline-first: your songs stay available when internet disappears.</p>
             </div>
             <div className="bs-logo-grid">
@@ -491,7 +496,7 @@ function LandingPage() {
             <div className="bs-section-head">
               <span className="bs-panel-label">Migration</span>
               <h2 className="bs-section-title">Already using OnSong or SongbookPro?</h2>
-              <p className="bs-section-copy">Import ChordPro and migrate your library in minutes. BandSong is designed for OnSong workflows — and you can export back anytime.</p>
+              <p className="bs-section-copy">Import ChordPro and migrate your library in minutes. BandSong is designed for OnSong workflows â€” and you can export back anytime.</p>
             </div>
             <div className="bs-row bs-row-3">
               <div className="bs-card bs-card-pad bs-feature bs-card-step"><h3 className="bs-feature-title">Import</h3></div>
@@ -506,7 +511,7 @@ function LandingPage() {
             <div className="bs-section-head">
               <span className="bs-panel-label">Import / Export</span>
               <h2 className="bs-section-title" id="import-export-title">Import and export without the chaos.</h2>
-              <p className="bs-section-copy">BandSong is built to move your existing library over quickly — and keep your songs portable. Import ChordPro, migrate from common songbook apps, and use guided tools when your source is messy.</p>
+              <p className="bs-section-copy">BandSong is built to move your existing library over quickly â€” and keep your songs portable. Import ChordPro, migrate from common songbook apps, and use guided tools when your source is messy.</p>
             </div>
             <div className="bs-feature-grid bs-import-card-grid">
               {importExportCards.map((card) => (
@@ -569,7 +574,7 @@ function LandingPage() {
             <a className="bs-link bs-focus-ring" href="mailto:hello@bandsong.app">Contact</a>
             <a className="bs-link bs-focus-ring" href="#beta">Beta</a>
           </nav>
-          <p>© {currentYear} BandSong</p>
+          <p>Â© {currentYear} BandSong</p>
         </div>
       </footer>
 
