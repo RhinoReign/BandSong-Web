@@ -39,7 +39,15 @@ const demoSteps = [
   'Walk into rehearsal knowing everyone is aligned.',
 ]
 
-const heroPreview = {
+type ScreenContext = {
+  src: string
+  alt: string
+  label: string
+  context: string
+  badges: string[]
+}
+
+const heroPreview: ScreenContext = {
   src: '/ScreenGrabs/BandSong Suite - Editor_WebP.webp',
   alt: 'BandSong editor screen',
   label: 'Editor UI Preview',
@@ -47,11 +55,11 @@ const heroPreview = {
   badges: ['Preparation', 'Publishing', 'Song detail'],
 }
 
-const previewCards = [
+const previewCards: Array<ScreenContext & { title: string; copy: string }> = [
   {
     title: 'Song Editor',
     copy: 'Structure, lyrics, metadata, and confidence notes in one clear editing view.',
-    image: '/ScreenGrabs/BandSong Suite - Editor_WebP.webp',
+    src: '/ScreenGrabs/BandSong Suite - Editor_WebP.webp',
     label: 'Song Editor',
     alt: 'BandSong song editor screen',
     context: 'This is where a director or teacher makes the canonical update that everyone else receives.',
@@ -60,7 +68,7 @@ const previewCards = [
   {
     title: 'Setlist Builder',
     copy: 'Build the running order fast, keep transitions visible, and prep the room before downbeat.',
-    image: '/ScreenGrabs/BandSong Suite - Setlists_WebP.webp',
+    src: '/ScreenGrabs/BandSong Suite - Setlists_WebP.webp',
     label: 'Setlist Builder',
     alt: 'BandSong setlists screen',
     context: 'Use this screen to arrange the service or gig flow and keep the band aligned on sequence changes.',
@@ -69,7 +77,7 @@ const previewCards = [
   {
     title: 'Shared Library',
     copy: 'Give every player the same published songs and arrangements across the whole group.',
-    image: '/ScreenGrabs/BandSong Suite - Table_WebP.webp',
+    src: '/ScreenGrabs/BandSong Suite - Table_WebP.webp',
     label: 'Shared Library',
     alt: 'BandSong shared library table screen',
     context: 'The library helps the team find the latest published material quickly instead of hunting through chats.',
@@ -77,10 +85,10 @@ const previewCards = [
   },
 ]
 
-const galleryCards = [
+const galleryCards: Array<ScreenContext & { title: string }> = [
   {
     title: 'Chords View',
-    image: '/ScreenGrabs/BandSong Suite - Chords_WebP.webp',
+    src: '/ScreenGrabs/BandSong Suite - Chords_WebP.webp',
     label: 'Chords',
     alt: 'BandSong chords view screen',
     context: 'A player-focused reading view for following harmonic movement without extra editing controls.',
@@ -88,7 +96,7 @@ const galleryCards = [
   },
   {
     title: 'Settings',
-    image: '/ScreenGrabs/BandSong Suite - Settings_WebP.webp',
+    src: '/ScreenGrabs/BandSong Suite - Settings_WebP.webp',
     label: 'Settings',
     alt: 'BandSong settings screen',
     context: 'Configuration lives here so teams can tailor how the app behaves for devices, sessions, and access.',
@@ -96,7 +104,7 @@ const galleryCards = [
   },
   {
     title: 'Viewer Live',
-    image: '/ScreenGrabs/BandSong Suite - Viewer Live_WebP.webp',
+    src: '/ScreenGrabs/BandSong Suite - Viewer Live_WebP.webp',
     label: 'Viewer Live',
     alt: 'BandSong live viewer screen',
     context: 'The live screen strips things back so performers can focus on the current chart in the moment.',
@@ -153,12 +161,6 @@ type MobileMenuProps = {
   theme: ThemeMode
   onThemeChange: (theme: ThemeMode) => void
   onJoinBeta: () => void
-}
-
-type ViewerImage = {
-  src: string
-  alt: string
-  label: string
 }
 
 function ThemeControl({ theme, onThemeChange }: ThemeControlProps) {
@@ -218,7 +220,7 @@ function LandingPage() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [betaOpen, setBetaOpen] = useState(false)
   const [demoOpen, setDemoOpen] = useState(false)
-  const [viewerImage, setViewerImage] = useState<ViewerImage | null>(null)
+  const [viewerImage, setViewerImage] = useState<ScreenContext | null>(null)
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
   const [betaSuccess, setBetaSuccess] = useState(false)
@@ -263,7 +265,7 @@ function LandingPage() {
     setBetaSuccess(true)
   }
 
-  const openViewer = (image: ViewerImage) => {
+  const openViewer = (image: ScreenContext) => {
     setViewerImage(image)
   }
 
@@ -341,12 +343,7 @@ function LandingPage() {
                 </div>
                 <p className="bs-feature-copy">{heroPreview.context}</p>
               </div>
-              <PreviewFrame
-                src={heroPreview.src}
-                alt={heroPreview.alt}
-                label={heroPreview.label}
-                onOpen={() => openViewer({ src: heroPreview.src, alt: heroPreview.alt, label: heroPreview.label })}
-              />
+              <PreviewFrame src={heroPreview.src} alt={heroPreview.alt} label={heroPreview.label} onOpen={() => openViewer(heroPreview)} />
               <div className="bs-code-chip">Offline-first publishing for music groups</div>
             </aside>
           </div>
@@ -410,12 +407,7 @@ function LandingPage() {
                     <p className="bs-feature-copy">{card.copy}</p>
                     <p className="bs-feature-copy bs-image-note">{card.context}</p>
                   </div>
-                  <PreviewFrame
-                    src={card.image}
-                    alt={card.alt}
-                    label={card.label}
-                    onOpen={() => openViewer({ src: card.image, alt: card.alt, label: card.label })}
-                  />
+                  <PreviewFrame src={card.src} alt={card.alt} label={card.label} onOpen={() => openViewer(card)} />
                 </article>
               ))}
             </div>
@@ -439,12 +431,7 @@ function LandingPage() {
                   </div>
                   <h3 className="bs-feature-title">{card.title}</h3>
                   <p className="bs-feature-copy bs-image-note">{card.context}</p>
-                  <PreviewFrame
-                    src={card.image}
-                    alt={card.alt}
-                    label={card.label}
-                    onOpen={() => openViewer({ src: card.image, alt: card.alt, label: card.label })}
-                  />
+                  <PreviewFrame src={card.src} alt={card.alt} label={card.label} onOpen={() => openViewer(card)} />
                 </article>
               ))}
             </div>
@@ -607,13 +594,7 @@ function LandingPage() {
             src="/ScreenGrabs/BandSong Suite - Viewer Live_WebP.webp"
             alt="BandSong live viewer screen"
             label="Viewer Live"
-            onOpen={() =>
-              openViewer({
-                src: '/ScreenGrabs/BandSong Suite - Viewer Live_WebP.webp',
-                alt: 'BandSong live viewer screen',
-                label: 'Viewer Live',
-              })
-            }
+            onOpen={() => openViewer(galleryCards[2])}
           />
         </div>
       </Modal>
@@ -621,7 +602,12 @@ function LandingPage() {
       <Modal open={viewerImage !== null} title={viewerImage?.label ?? 'Image viewer'} onClose={() => setViewerImage(null)}>
         {viewerImage ? (
           <div className="bs-showcase-stack">
-            <p className="bs-feature-copy">Tap or click outside to close. Use this view to inspect the actual app screen in more detail.</p>
+            <div className="bs-badge-row">
+              {viewerImage.badges.map((badge) => (
+                <span key={badge} className="bs-code-chip">{badge}</span>
+              ))}
+            </div>
+            <p className="bs-feature-copy">{viewerImage.context}</p>
             <div className="bs-viewer-frame">
               <img className="bs-viewer-image" src={viewerImage.src} alt={viewerImage.alt} />
             </div>
