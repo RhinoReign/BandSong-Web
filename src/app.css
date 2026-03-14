@@ -1,0 +1,346 @@
+#root {
+  min-height: 100vh;
+}
+
+.bs-site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(14px);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+}
+
+.bs-site-header-inner,
+.bs-nav,
+.bs-theme-picker,
+.bs-mobile-panel-inner,
+.bs-mobile-nav,
+.bs-footer-links,
+.bs-modal-head,
+.bs-badge-row {
+  display: flex;
+}
+
+.bs-site-header-inner {
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.bs-brand {
+  display: inline-flex;
+  align-items: center;
+  max-width: min(15rem, 44vw);
+}
+
+.bs-brand-logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.bs-nav {
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.bs-nav-desktop {
+  justify-content: flex-end;
+}
+
+.bs-theme-picker {
+  align-items: center;
+  gap: 0.55rem;
+  min-height: 3rem;
+  padding-right: 0.45rem;
+}
+
+.bs-theme-picker-copy {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.bs-theme-select {
+  appearance: none;
+  min-height: 2.25rem;
+  padding: 0.35rem 1.9rem 0.35rem 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  background-color: color-mix(in srgb, var(--panel) 72%, transparent);
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+  background-position: calc(100% - 1rem) calc(50% - 0.12rem), calc(100% - 0.72rem) calc(50% - 0.12rem);
+  background-size: 0.32rem 0.32rem, 0.32rem 0.32rem;
+  background-repeat: no-repeat;
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.bs-theme-select:focus {
+  outline: none;
+}
+
+.bs-menu-button {
+  display: none;
+}
+
+.bs-mobile-panel {
+  display: none;
+}
+
+.bs-mobile-panel.is-open {
+  display: block;
+  padding: 0 1rem 1rem;
+}
+
+.bs-mobile-panel-inner {
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.bs-mobile-nav {
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.bs-skip-link {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 30;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  background: var(--panel);
+  border: 1px solid var(--accent-border);
+  transform: translateY(-180%);
+  transition: transform 160ms ease;
+}
+
+.bs-skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.bs-list-clean {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bs-problem-item {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+}
+
+.bs-problem-item:last-child {
+  border-bottom: 0;
+}
+
+.bs-problem-close,
+.bs-workflow-close,
+.bs-image-note {
+  margin-top: 1.25rem;
+}
+
+.bs-image-context {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.bs-badge-row {
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.bs-preview-shell {
+  width: 100%;
+  border-radius: 0;
+}
+
+.bs-preview-shell.is-clickable .bs-preview-frame {
+  cursor: zoom-in;
+}
+
+.bs-preview-frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0;
+  border: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+  background: color-mix(in srgb, var(--panel-2) 92%, black 8%);
+}
+
+.bs-preview-frame:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-ring);
+}
+
+.bs-preview-image {
+  display: block;
+}
+
+.bs-preview-zoom {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+}
+
+.bs-preview-placeholder {
+  display: grid;
+  gap: 1rem;
+  height: 100%;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--panel-2) 92%, transparent), color-mix(in srgb, var(--panel) 98%, transparent)),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--accent-soft) 100%, transparent), transparent 45%);
+}
+
+.bs-preview-topbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.bs-preview-placeholder-body {
+  display: grid;
+  gap: 0.8rem;
+  align-content: center;
+  min-height: 0;
+}
+
+.bs-preview-mono {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: clamp(0.78rem, 1.3vw, 1rem);
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--text) 88%, var(--muted) 12%);
+}
+
+.bs-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(5, 7, 10, 0.72);
+}
+
+.bs-modal-panel {
+  width: min(100%, 42rem);
+  max-height: min(100vh - 2rem, 44rem);
+  overflow: auto;
+}
+
+.bs-modal-panel:has(.bs-viewer-frame) {
+  width: min(96vw, 96rem);
+  max-height: min(100vh - 2rem, 96vh);
+}
+
+.bs-modal-head {
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.bs-modal-title {
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+}
+
+.bs-modal-content {
+  display: grid;
+  gap: 1rem;
+}
+
+.bs-form-field {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.bs-input {
+  min-height: 3rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--border) 92%, transparent);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--panel-2) 92%, transparent);
+  color: var(--text);
+  font: inherit;
+}
+
+.bs-input::placeholder {
+  color: var(--muted);
+}
+
+.bs-form-error {
+  margin: 0;
+  color: #ff8d8d;
+}
+
+.bs-viewer-frame {
+  overflow: auto;
+  border-radius: 0;
+  border: 1px solid color-mix(in srgb, var(--border) 88%, transparent);
+  background: color-mix(in srgb, var(--panel-2) 92%, black 8%);
+}
+
+.bs-viewer-image {
+  display: block;
+  width: 100%;
+  min-width: min(96rem, 100%);
+  height: auto;
+}
+
+.bs-beta-card {
+  text-align: left;
+}
+
+.bs-footer-links {
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+@media (max-width: 960px) {
+  .bs-nav-desktop {
+    display: none;
+  }
+
+  .bs-menu-button {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 961px) {
+  .bs-mobile-panel {
+    display: none !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .bs-theme-picker,
+  .bs-theme-select,
+  .bs-modal-head {
+    width: 100%;
+  }
+
+  .bs-theme-picker,
+  .bs-modal-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .bs-brand {
+    max-width: 12rem;
+  }
+
+  .bs-modal-panel:has(.bs-viewer-frame) {
+    width: min(100%, 100vw - 1rem);
+  }
+
+  .bs-viewer-image {
+    min-width: 100%;
+  }
+}
