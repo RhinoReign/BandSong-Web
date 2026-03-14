@@ -6,9 +6,17 @@ type PreviewFrameProps = {
   label?: string
   children?: ReactNode
   onOpen?: () => void
+  variant?: 'default' | 'card'
 }
 
-function PreviewFrame({ src, alt = 'Preview image', label, children, onOpen }: PreviewFrameProps) {
+function PreviewFrame({
+  src,
+  alt = 'Preview image',
+  label,
+  children,
+  onOpen,
+  variant = 'default',
+}: PreviewFrameProps) {
   const [hasImageError, setHasImageError] = useState(false)
 
   useEffect(() => {
@@ -30,9 +38,9 @@ function PreviewFrame({ src, alt = 'Preview image', label, children, onOpen }: P
   }
 
   return (
-    <div className={`bs-card bs-card-hero bs-preview-shell${clickable ? ' is-clickable' : ''}`}>
+    <div className={`bs-card bs-card-hero bs-preview-shell bs-preview-shell-${variant}${clickable ? ' is-clickable' : ''}`}>
       <div
-        className="bs-preview-frame"
+        className={`bs-preview-frame bs-preview-frame-${variant}`}
         style={{ aspectRatio: '1920 / 945' }}
         onClick={clickable ? onOpen : undefined}
         onKeyDown={handleKeyDown}
@@ -51,10 +59,9 @@ function PreviewFrame({ src, alt = 'Preview image', label, children, onOpen }: P
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               onError={() => setHasImageError(true)}
             />
-            {clickable ? <span className="bs-preview-zoom bs-code-chip">Open larger view</span> : null}
           </>
         ) : (
-          <div className="bs-preview-placeholder">
+          <div className={`bs-preview-placeholder bs-preview-placeholder-${variant}`}>
             <div className="bs-preview-topbar">
               {label ? <span className="bs-panel-label bs-panel-label-accent">{label}</span> : null}
               <span className="bs-code-chip">v2.0.0</span>
