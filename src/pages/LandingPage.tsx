@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import Modal from '../components/Modal'
 import PreviewFrame from '../components/PreviewFrame'
-import { useTheme, type ThemeMode } from '../hooks/useTheme'
 
 const navLinks = [
   { href: '#features', label: 'Features' },
@@ -9,12 +8,6 @@ const navLinks = [
   { href: '#migration', label: 'Migration' },
   { href: '#beta', label: 'Beta' },
   { href: '#faq', label: 'FAQ' },
-]
-
-const themeOptions: Array<{ value: ThemeMode; label: string }> = [
-  { value: 'dark', label: 'Dark' },
-  { value: 'light-studio', label: 'Studio' },
-  { value: 'light-paper', label: 'Paper' },
 ]
 
 const problemPoints = [
@@ -150,41 +143,13 @@ const faqs = [
   },
 ]
 
-type ThemeControlProps = {
-  theme: ThemeMode
-  onThemeChange: (theme: ThemeMode) => void
-}
-
 type MobileMenuProps = {
   open: boolean
   onNavigate: () => void
-  theme: ThemeMode
-  onThemeChange: (theme: ThemeMode) => void
   onJoinBeta: () => void
 }
 
-function ThemeControl({ theme, onThemeChange }: ThemeControlProps) {
-  return (
-    <label className="bs-panel-label bs-theme-picker bs-focus-ring" htmlFor="theme-select">
-      <span className="bs-theme-picker-copy">Theme</span>
-      <select
-        id="theme-select"
-        className="bs-theme-select"
-        aria-label="Theme"
-        value={theme}
-        onChange={(event) => onThemeChange(event.target.value as ThemeMode)}
-      >
-        {themeOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </label>
-  )
-}
-
-function MobileMenu({ open, onNavigate, theme, onThemeChange, onJoinBeta }: MobileMenuProps) {
+function MobileMenu({ open, onNavigate, onJoinBeta }: MobileMenuProps) {
   return (
     <div className={`bs-mobile-panel${open ? ' is-open' : ''}`} hidden={!open}>
       <div className="bs-mobile-panel-inner bs-card bs-card-pad">
@@ -195,7 +160,6 @@ function MobileMenu({ open, onNavigate, theme, onThemeChange, onJoinBeta }: Mobi
             </a>
           ))}
         </nav>
-        <ThemeControl theme={theme} onThemeChange={onThemeChange} />
         <button
           type="button"
           className="bs-button bs-button-primary bs-focus-ring"
@@ -216,7 +180,7 @@ function isValidEmail(value: string) {
 }
 
 function LandingPage() {
-  const { theme, setTheme } = useTheme()
+  const landingRef = useRef<HTMLDivElement | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [betaOpen, setBetaOpen] = useState(false)
   const [demoOpen, setDemoOpen] = useState(false)
@@ -224,6 +188,73 @@ function LandingPage() {
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
   const [betaSuccess, setBetaSuccess] = useState(false)
+
+  useEffect(() => {
+    const landingElement = landingRef.current
+    if (!landingElement) {
+      return undefined
+    }
+
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const isFinePointer = window.matchMedia('(pointer: fine)').matches
+    const initialX = window.innerWidth * 0.68
+    const initialY = window.innerHeight * 0.22
+    const target = { x: initialX, y: initialY, opacity: isFinePointer ? 0.34 : 0.24 }
+    const current = { x: initialX, y: initialY, opacity: isFinePointer ? 0.34 : 0.24 }
+
+    landingElement.style.setProperty('--bs-glow-x', `${current.x}px`)
+    landingElement.style.setProperty('--bs-glow-y', `${current.y}px`)
+    landingElement.style.setProperty('--bs-glow-opacity', `${current.opacity}`)
+
+    let frameId = 0
+
+    const render = () => {
+      const smoothing = mediaQuery.matches ? 1 : 0.02
+      current.x += (target.x - current.x) * smoothing
+      current.y += (target.y - current.y) * smoothing
+      current.opacity += (target.opacity - current.opacity) * (mediaQuery.matches ? 1 : 0.04)
+
+      landingElement.style.setProperty('--bs-glow-x', `${current.x.toFixed(1)}px`)
+      landingElement.style.setProperty('--bs-glow-y', `${current.y.toFixed(1)}px`)
+      landingElement.style.setProperty('--bs-glow-opacity', current.opacity.toFixed(3))
+
+      frameId = window.requestAnimationFrame(render)
+    }
+
+    const onPointerMove = (event: PointerEvent) => {
+      if (event.pointerType && event.pointerType !== 'mouse' && event.pointerType !== 'pen') {
+        return
+      }
+
+      target.x = Math.min(window.innerWidth - 80, Math.max(80, event.clientX + 64))
+      target.y = Math.min(window.innerHeight - 80, Math.max(80, event.clientY + 36))
+      target.opacity = 0.54
+    }
+
+    const resetGlow = () => {
+      target.x = window.innerWidth * 0.68
+      target.y = window.innerHeight * 0.22
+      target.opacity = isFinePointer ? 0.34 : 0.24
+    }
+
+    frameId = window.requestAnimationFrame(render)
+
+    if (isFinePointer) {
+      window.addEventListener('pointermove', onPointerMove)
+      window.addEventListener('pointerleave', resetGlow)
+    } else {
+      resetGlow()
+    }
+
+    window.addEventListener('resize', resetGlow)
+
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerleave', resetGlow)
+      window.removeEventListener('resize', resetGlow)
+    }
+  }, [])
 
   useEffect(() => {
     if (!mobileOpen) {
@@ -270,32 +301,31 @@ function LandingPage() {
   }
 
   return (
-    <div className="bs-landing">
+    <div className="bs-landing" ref={landingRef}>
       <a className="bs-skip-link" href="#main-content">
         Skip to content
       </a>
 
       <header className="bs-site-header">
-        <div className="bs-shell bs-site-header-inner bs-section-tight">
+        <div className="bs-shell bs-site-header-inner bs-section-tight bs-site-header-compact">
           <a className="bs-brand bs-focus-ring" href="#top" aria-label="BandSong home" onClick={closeMobileMenu}>
             <img className="bs-brand-logo" src="/BandSong Logo - Type.svg" alt="BandSong" />
           </a>
 
-          <nav className="bs-nav bs-nav-desktop" aria-label="Primary">
+          <nav className="bs-nav bs-nav-desktop bs-nav-compact" aria-label="Primary">
             {navLinks.map((link) => (
-              <a key={link.href} className="bs-link bs-focus-ring" href={link.href}>
+              <a key={link.href} className="bs-link bs-focus-ring bs-nav-link" href={link.href}>
                 {link.label}
               </a>
             ))}
-            <ThemeControl theme={theme} onThemeChange={setTheme} />
-            <button type="button" className="bs-button bs-button-primary bs-focus-ring" onClick={openBetaModal}>
+            <button type="button" className="bs-button bs-button-primary bs-focus-ring bs-nav-cta" onClick={openBetaModal}>
               Join the Beta
             </button>
           </nav>
 
           <button
             type="button"
-            className="bs-button bs-button-secondary bs-focus-ring bs-menu-button"
+            className="bs-button bs-button-secondary bs-focus-ring bs-menu-button bs-nav-cta"
             aria-expanded={mobileOpen}
             aria-controls="mobile-nav-panel"
             aria-label="Toggle navigation menu"
@@ -305,13 +335,7 @@ function LandingPage() {
           </button>
         </div>
         <div id="mobile-nav-panel">
-          <MobileMenu
-            open={mobileOpen}
-            onNavigate={closeMobileMenu}
-            theme={theme}
-            onThemeChange={setTheme}
-            onJoinBeta={openBetaModal}
-          />
+          <MobileMenu open={mobileOpen} onNavigate={closeMobileMenu} onJoinBeta={openBetaModal} />
         </div>
       </header>
 
@@ -377,7 +401,7 @@ function LandingPage() {
             </div>
             <div className="bs-row bs-row-3">
               {workflowSteps.map((step, index) => (
-                <article key={step} className="bs-card bs-card-pad bs-feature">
+                <article key={step} className="bs-card bs-card-pad bs-feature bs-elevated-card">
                   <span className="bs-panel-label">0{index + 1}</span>
                   <h3 className="bs-feature-title">{step}</h3>
                 </article>
@@ -396,14 +420,14 @@ function LandingPage() {
             </div>
             <div className="bs-row bs-row-3">
               {previewCards.map((card) => (
-                <article key={card.title} className="bs-card bs-card-pad bs-showcase">
-                  <div>
-                    <div className="bs-badge-row">
+                <article key={card.title} className="bs-card bs-card-pad bs-showcase bs-showcase-card">
+                  <div className="bs-showcase-copy">
+                    <div className="bs-badge-row bs-badge-row-tight">
                       {card.badges.map((badge) => (
                         <span key={badge} className="bs-code-chip">{badge}</span>
                       ))}
                     </div>
-                    <h3 className="bs-feature-title">{card.title}</h3>
+                    <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
                     <p className="bs-feature-copy">{card.copy}</p>
                     <p className="bs-feature-copy bs-image-note">{card.context}</p>
                   </div>
@@ -423,14 +447,16 @@ function LandingPage() {
             </div>
             <div className="bs-row bs-row-3">
               {galleryCards.map((card) => (
-                <article key={card.title} className="bs-card bs-card-pad bs-showcase">
-                  <div className="bs-badge-row">
-                    {card.badges.map((badge) => (
-                      <span key={badge} className="bs-code-chip">{badge}</span>
-                    ))}
+                <article key={card.title} className="bs-card bs-card-pad bs-showcase bs-showcase-card">
+                  <div className="bs-showcase-copy">
+                    <div className="bs-badge-row bs-badge-row-tight">
+                      {card.badges.map((badge) => (
+                        <span key={badge} className="bs-code-chip">{badge}</span>
+                      ))}
+                    </div>
+                    <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
+                    <p className="bs-feature-copy bs-image-note">{card.context}</p>
                   </div>
-                  <h3 className="bs-feature-title">{card.title}</h3>
-                  <p className="bs-feature-copy bs-image-note">{card.context}</p>
                   <PreviewFrame src={card.src} alt={card.alt} label={card.label} onOpen={() => openViewer(card)} />
                 </article>
               ))}
@@ -446,9 +472,9 @@ function LandingPage() {
             </div>
             <div className="bs-feature-grid">
               {featurePillars.map((feature) => (
-                <article key={feature.title} className="bs-card bs-card-pad bs-feature">
+                <article key={feature.title} className="bs-card bs-card-pad bs-feature bs-elevated-card">
                   <span className="bs-panel-label">Feature</span>
-                  <h3 className="bs-feature-title">{feature.title}</h3>
+                  <h3 className="bs-feature-title bs-showcase-card-title">{feature.title}</h3>
                   <p className="bs-feature-copy">{feature.copy}</p>
                 </article>
               ))}
@@ -479,9 +505,9 @@ function LandingPage() {
               <p className="bs-section-copy">Start with the material you already have, clean it up once, and then publish it into a system the whole group can trust.</p>
             </div>
             <div className="bs-row bs-row-3">
-              <div className="bs-card bs-card-pad bs-feature"><h3 className="bs-feature-title">Import</h3></div>
-              <div className="bs-card bs-card-pad bs-feature"><h3 className="bs-feature-title">Review</h3></div>
-              <div className="bs-card bs-card-pad bs-feature"><h3 className="bs-feature-title">Publish</h3></div>
+              <div className="bs-card bs-card-pad bs-feature bs-elevated-card"><h3 className="bs-feature-title">Import</h3></div>
+              <div className="bs-card bs-card-pad bs-feature bs-elevated-card"><h3 className="bs-feature-title">Review</h3></div>
+              <div className="bs-card bs-card-pad bs-feature bs-elevated-card"><h3 className="bs-feature-title">Publish</h3></div>
             </div>
           </div>
         </section>
@@ -509,8 +535,8 @@ function LandingPage() {
             </div>
             <div className="bs-showcase-stack">
               {faqs.map((item) => (
-                <article key={item.question} className="bs-card bs-card-pad bs-feature">
-                  <h3 className="bs-feature-title">{item.question}</h3>
+                <article key={item.question} className="bs-card bs-card-pad bs-feature bs-elevated-card">
+                  <h3 className="bs-feature-title bs-showcase-card-title">{item.question}</h3>
                   <p className="bs-feature-copy">{item.answer}</p>
                 </article>
               ))}
@@ -528,7 +554,7 @@ function LandingPage() {
             <a className="bs-link bs-focus-ring" href="mailto:hello@bandsong.app">Contact</a>
             <a className="bs-link bs-focus-ring" href="#top">Privacy</a>
           </nav>
-          <p>� {currentYear} BandSong</p>
+          <p>© {currentYear} BandSong</p>
         </div>
       </footer>
 
@@ -619,3 +645,10 @@ function LandingPage() {
 }
 
 export default LandingPage
+
+
+
+
+
+
+
