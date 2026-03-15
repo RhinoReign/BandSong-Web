@@ -1838,12 +1838,13 @@ section[id="faq"] .bs-elevated-card::before {
   content: '';
   position: absolute;
   inset: 0;
+  --bs-outline-angle: 0deg;
   padding: 1px;
   border-radius: inherit;
   pointer-events: none;
   opacity: 0.7;
   background: conic-gradient(
-    from 0deg,
+    from var(--bs-outline-angle),
     transparent 0deg 332deg,
     color-mix(in srgb, var(--accent-fill) 48%, transparent) 338deg 345deg,
     color-mix(in srgb, white 28%, var(--accent-fill) 72%) 346deg 349deg,
@@ -1862,12 +1863,18 @@ section[id="faq"] .bs-elevated-card::before {
   animation: bsCardOutlineTrace 7.2s linear infinite;
 }
 
+@property --bs-outline-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
 @keyframes bsCardOutlineTrace {
   from {
-    transform: rotate(0deg);
+    --bs-outline-angle: 0deg;
   }
 
   to {
-    transform: rotate(360deg);
+    --bs-outline-angle: 360deg;
   }
 }
