@@ -219,8 +219,10 @@ body {
     box-shadow 240ms ease;
 }
 
-.bs-showcase-card:hover,
-.bs-showcase-card:focus-within {
+.bs-showcase-card.is-clickable:hover,
+.bs-showcase-card.is-clickable:focus-visible,
+.bs-appearance-preview-card.is-clickable:hover,
+.bs-appearance-preview-card.is-clickable:focus-visible {
   transform: translateY(-6px);
   border-color: color-mix(in srgb, var(--accent-fill) 38%, var(--border) 62%);
   box-shadow:
@@ -228,14 +230,6 @@ body {
     0 10px 28px -22px rgba(0, 0, 0, 0.65);
 }
 
-.bs-elevated-card:hover,
-.bs-elevated-card:focus-within {
-  transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--accent-fill) 34%, var(--border) 66%);
-  box-shadow:
-    0 16px 34px -28px rgba(0, 0, 0, 0.82),
-    0 8px 20px -18px rgba(0, 0, 0, 0.58);
-}
 
 .bs-card-step {
   transition:
@@ -243,11 +237,6 @@ body {
     border-color 200ms ease;
 }
 
-.bs-card-step:hover,
-.bs-card-step:focus-within {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent-fill) 24%, var(--border) 76%);
-}
 
 .bs-showcase-copy {
   display: grid;
@@ -537,6 +526,47 @@ body {
 
 .bs-hero-line {
   display: block;
+}
+
+.bs-hero-tempo-dot {
+  display: inline-block;
+  color: var(--accent-fill);
+  transform-origin: 50% 60%;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  animation: bsTempoPulse 1.2s cubic-bezier(0.2, 0.9, 0.28, 1) infinite;
+  will-change: transform, opacity, text-shadow;
+}
+
+@keyframes bsTempoPulse {
+  0%,
+  18%,
+  100% {
+    transform: translateZ(0) scale(1);
+    opacity: 0.9;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+
+  32% {
+    transform: translateZ(0) scale(1.16);
+    opacity: 1;
+    text-shadow:
+      0 0 14px color-mix(in srgb, var(--accent-fill) 28%, transparent),
+      0 0 22px color-mix(in srgb, var(--accent-fill) 14%, transparent);
+  }
+
+  52% {
+    transform: translateZ(0) scale(1.03);
+    opacity: 0.95;
+    text-shadow:
+      0 0 6px color-mix(in srgb, var(--accent-fill) 12%, transparent);
+  }
+
+  68% {
+    transform: translateZ(0) scale(1);
+    opacity: 0.9;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
 }
 
 .bs-hero-lead {
@@ -923,14 +953,6 @@ section[aria-labelledby="problem-title"] .bs-problem-layout > .bs-card {
   color: var(--accent-fill);
 }
 
-.bs-workflow-step:hover,
-.bs-workflow-step:focus-within {
-  transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--accent-fill) 34%, var(--border) 66%);
-  box-shadow:
-    0 18px 34px -28px rgba(0, 0, 0, 0.82),
-    0 8px 20px -18px rgba(0, 0, 0, 0.58);
-}
 
 .bs-workflow-close {
   margin-top: 1.35rem;
@@ -1533,10 +1555,6 @@ section[id="faq"] .bs-showcase-card-title {
   transition: color 180ms ease;
 }
 
-section[id="faq"] .bs-elevated-card:hover .bs-showcase-card-title,
-section[id="faq"] .bs-elevated-card:focus-within .bs-showcase-card-title {
-  color: var(--accent-fill);
-}
 
 
 .bs-button-primary {
@@ -1714,6 +1732,37 @@ section[id="faq"] .bs-elevated-card:focus-within .bs-showcase-card-title {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .bs-hero-tempo-dot {
+    animation: none;
+    transform: none;
+    text-shadow: none;
+  }
+
+  .bs-problem-list-card::before,
+  .bs-workflow-card::before,
+  .bs-feature-pillar-card::before,
+  .bs-trust-proof-card:not(.bs-trust-proof-card-accent)::before,
+  .bs-migration-step:not(.bs-migration-step-accent)::before,
+  .bs-import-card:not(.bs-import-card-accent)::before,
+  .bs-intelligence-card::before,
+  section[aria-labelledby="appearance-title"] .bs-appearance-feature::before,
+  section[id="faq"] .bs-elevated-card::before {
+    animation: none;
+    opacity: 0;
+  }
+
+  .bs-problem-list-card::after,
+  .bs-workflow-card::after,
+  .bs-feature-pillar-card::after,
+  .bs-trust-proof-card:not(.bs-trust-proof-card-accent)::after,
+  .bs-migration-step:not(.bs-migration-step-accent)::after,
+  .bs-import-card:not(.bs-import-card-accent)::after,
+  .bs-intelligence-card::after,
+  section[aria-labelledby="appearance-title"] .bs-appearance-feature::after,
+  section[id="faq"] .bs-elevated-card::after {
+    opacity: 0.8;
+  }
+
   .bs-reveal,
   .bs-workflow-grid > :nth-child(2),
   .bs-intelligence-strip > :nth-child(2),
@@ -1727,5 +1776,98 @@ section[id="faq"] .bs-elevated-card:focus-within .bs-showcase-card-title {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+
+.bs-workflow-card.is-clickable,
+.bs-appearance-preview-card.is-clickable {
+  cursor: zoom-in;
+}
+
+.bs-workflow-card.is-clickable:focus-visible,
+.bs-appearance-preview-card.is-clickable:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px var(--accent-ring),
+    0 18px 42px -30px rgba(0, 0, 0, 0.9),
+    0 10px 28px -22px rgba(0, 0, 0, 0.65);
+}
+
+.bs-problem-list-card,
+.bs-workflow-card,
+.bs-feature-pillar-card,
+.bs-trust-proof-card:not(.bs-trust-proof-card-accent),
+.bs-migration-step:not(.bs-migration-step-accent),
+.bs-import-card:not(.bs-import-card-accent),
+.bs-intelligence-card,
+section[aria-labelledby="appearance-title"] .bs-appearance-feature,
+section[id="faq"] .bs-elevated-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.bs-problem-list-card::after,
+.bs-workflow-card::after,
+.bs-feature-pillar-card::after,
+.bs-trust-proof-card:not(.bs-trust-proof-card-accent)::after,
+.bs-migration-step:not(.bs-migration-step-accent)::after,
+.bs-import-card:not(.bs-import-card-accent)::after,
+.bs-intelligence-card::after,
+section[aria-labelledby="appearance-title"] .bs-appearance-feature::after,
+section[id="faq"] .bs-elevated-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, var(--border) 94%, white 6%);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.bs-problem-list-card::before,
+.bs-workflow-card::before,
+.bs-feature-pillar-card::before,
+.bs-trust-proof-card:not(.bs-trust-proof-card-accent)::before,
+.bs-migration-step:not(.bs-migration-step-accent)::before,
+.bs-import-card:not(.bs-import-card-accent)::before,
+.bs-intelligence-card::before,
+section[aria-labelledby="appearance-title"] .bs-appearance-feature::before,
+section[id="faq"] .bs-elevated-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.7;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 332deg,
+    color-mix(in srgb, var(--accent-fill) 48%, transparent) 338deg 345deg,
+    color-mix(in srgb, white 28%, var(--accent-fill) 72%) 346deg 349deg,
+    color-mix(in srgb, var(--accent-fill) 42%, transparent) 350deg 356deg,
+    transparent 357deg 360deg
+  );
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  filter: blur(0.2px);
+  animation: bsCardOutlineTrace 7.2s linear infinite;
+}
+
+@keyframes bsCardOutlineTrace {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
   }
 }

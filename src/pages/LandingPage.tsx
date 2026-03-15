@@ -55,6 +55,19 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
+function handleCardKeyDown(event: React.KeyboardEvent<HTMLElement>, onOpen?: () => void) {
+  if (!onOpen) {
+    return
+  }
+
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault()
+    onOpen()
+  }
+}
+
+const betaInbox = 'info@rhinoreign.com'
+
 function LandingPage() {
   const landingRef = useRef<HTMLDivElement | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -248,8 +261,12 @@ function LandingPage() {
       return
     }
 
+    const subject = encodeURIComponent('BandSong Beta')
+    const body = encodeURIComponent(`Beta signup email: ${email}`)
+
     setEmailError('')
     setBetaSuccess(true)
+    window.location.href = `mailto:${betaInbox}?subject=${subject}&body=${body}`
   }
 
   return (
@@ -299,7 +316,7 @@ function LandingPage() {
               <h1 className="bs-display bs-hero-display">
                 <span className="bs-hero-line">Everyone plays</span>
                 <span className="bs-hero-line">the same version.</span>
-                <span className="bs-hero-line">Every time.</span>
+                <span className="bs-hero-line">Every time<span className="bs-hero-tempo-dot">.</span></span>
               </h1>
               <p className="bs-lead bs-lead-hero bs-hero-lead">
                 BandSong Suite is the musician workflow system for rehearsals and live performance. Edit songs, plan setlists, and perform from a calm stage-ready viewer - synced across devices.
@@ -396,19 +413,27 @@ function LandingPage() {
             <div className="bs-workflow-grid" aria-label="BandSong Suite workflow tools">
               {suiteCards.map((card) => {
                 const previewSrc = card.previewSrc
+                const openCardViewer = previewSrc
+                  ? () => openViewer(previewSrc, card.previewAlt ?? card.title, card.previewLabel ?? card.title)
+                  : undefined
 
                 return (
-                  <article key={card.title} className="bs-card bs-card-pad bs-feature bs-showcase-card bs-workflow-card bs-reveal" data-reveal>
+                  <article
+                    key={card.title}
+                    className={`bs-card bs-card-pad bs-feature bs-showcase-card bs-workflow-card bs-reveal${openCardViewer ? ' is-clickable' : ''}`}
+                    data-reveal
+                    role={openCardViewer ? 'button' : undefined}
+                    tabIndex={openCardViewer ? 0 : undefined}
+                    aria-label={openCardViewer ? `Open ${card.title} in large viewer` : undefined}
+                    onClick={openCardViewer}
+                    onKeyDown={(event) => handleCardKeyDown(event, openCardViewer)}
+                  >
                     <PreviewFrame
                       variant="card"
                       src={previewSrc}
                       alt={card.previewAlt ?? card.title}
                       label={card.previewLabel}
-                      onOpen={
-                        previewSrc
-                          ? () => openViewer(previewSrc, card.previewAlt ?? card.title, card.previewLabel ?? card.title)
-                          : undefined
-                      }
+                      onOpen={openCardViewer}
                     />
                     <div className="bs-showcase-copy">
                       <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
@@ -488,7 +513,28 @@ function LandingPage() {
                   </article>
                 </div>
               </div>
-              <aside className="bs-card bs-card-pad bs-showcase-stack bs-appearance-preview-card" aria-label="Viewer readability preview">
+              <aside
+                className="bs-card bs-card-pad bs-showcase-stack bs-appearance-preview-card is-clickable"
+                aria-label="Viewer readability preview"
+                role="button"
+                tabIndex={0}
+                onClick={() =>
+                  openViewer(
+                    '/ScreenGrabs/BandSong Suite - Settings_WebP.webp',
+                    'BandSong Suite appearance and settings screen',
+                    'Viewer Readability Preview',
+                  )
+                }
+                onKeyDown={(event) =>
+                  handleCardKeyDown(event, () =>
+                    openViewer(
+                      '/ScreenGrabs/BandSong Suite - Settings_WebP.webp',
+                      'BandSong Suite appearance and settings screen',
+                      'Viewer Readability Preview',
+                    ),
+                  )
+                }
+              >
                 <div className="bs-appearance-preview-head">
                   <span className="bs-panel-label bs-panel-label-accent">Stage preview</span>
                   <p className="bs-feature-copy">Tune the viewer for dark rooms, bright stages, and different reading preferences.</p>
@@ -708,8 +754,8 @@ function LandingPage() {
       <Modal open={betaOpen} title="Join the BandSong Beta" onClose={closeBetaModal}>
         {betaSuccess ? (
           <div className="bs-showcase-stack">
-            <p className="bs-section-copy">Thanks. You are on the beta interest list for this session.</p>
-            <p className="bs-feature-copy">If you prefer email, you can still reach us directly at beta@bandsong.app.</p>
+            <p className="bs-section-copy">Your email draft has been prepared for beta signup.</p>
+            <p className="bs-feature-copy">If your mail app did not open, you can still reach us directly at info@rhinoreign.com.</p>
           </div>
         ) : (
           <form className="bs-showcase-stack" onSubmit={handleBetaSubmit} noValidate>
@@ -744,7 +790,7 @@ function LandingPage() {
               </button>
               <a
                 className="bs-button bs-button-secondary bs-focus-ring"
-                href="mailto:beta@bandsong.app?subject=BandSong%20Beta"
+                href="mailto:info@rhinoreign.com?subject=BandSong%20Beta"
               >
                 Email Instead
               </a>
