@@ -829,63 +829,6 @@ section[aria-labelledby="problem-title"] .bs-problem-layout > .bs-card {
 }
 
 
-.bs-suite-rows {
-  display: grid;
-  gap: 3rem;
-  width: 100%;
-  max-width: min(100%, 72rem);
-  margin-inline: auto;
-}
-
-.bs-suite-row {
-  display: grid;
-  gap: 1.6rem;
-  align-items: stretch;
-}
-
-.bs-suite-media,
-.bs-suite-copy-card {
-  width: 100%;
-  min-width: 0;
-}
-
-.bs-suite-media {
-  display: grid;
-  align-content: stretch;
-}
-
-.bs-suite-media .bs-preview-shell,
-.bs-suite-media .bs-preview-frame {
-  height: 100%;
-}
-
-.bs-suite-copy-card {
-  display: grid;
-  align-content: center;
-  padding: 1.5rem 1.6rem;
-}
-
-.bs-suite-copy-card .bs-problem-item {
-  text-align: left;
-}
-
-@media (min-width: 960px) {
-  .bs-suite-row {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  }
-
-  .bs-suite-row.is-image-last {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  }
-
-  .bs-suite-row.is-image-last .bs-suite-media {
-    order: 2;
-  }
-
-  .bs-suite-row.is-image-last .bs-suite-copy-card {
-    order: 1;
-  }
-}
 
 
 .bs-workflow-flow {
@@ -1623,4 +1566,116 @@ section[id="faq"] .bs-elevated-card:focus-within .bs-showcase-card-title {
     0 8px 16px -14px rgba(0, 0, 0, 0.52),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   filter: none;
+}
+
+
+.bs-section-head-compact {
+  gap: 0.75rem;
+}
+
+.bs-intelligence-strip {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 74rem);
+  margin: 2rem auto 0;
+}
+
+.bs-intelligence-card {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+  text-align: center;
+  border-top: 1px solid color-mix(in srgb, var(--accent-fill) 34%, var(--border) 66%);
+}
+
+.bs-intelligence-card .bs-feature-title,
+.bs-intelligence-card .bs-feature-copy {
+  text-align: center;
+  margin: 0;
+}
+
+.bs-intelligence-points {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.2rem;
+}
+
+.bs-intelligence-point {
+  padding-top: 0.65rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 84%, transparent);
+  color: var(--muted);
+  text-align: center;
+}
+
+
+
+
+
+
+
+.bs-workflow-grid {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 74rem);
+  margin-inline: auto;
+}
+
+.bs-workflow-card {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.bs-workflow-card .bs-preview-shell,
+.bs-workflow-card .bs-preview-frame {
+  width: 100%;
+}
+
+.bs-workflow-card .bs-problem-item {
+  text-align: left;
+}
+
+@media (min-width: 720px) {
+  .bs-workflow-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+
+@media (min-width: 960px) {
+  #chords .bs-intelligence-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+}
+
+
+.bs-feature-pillars-grid {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 72rem);
+  margin: 2rem auto 0;
+}
+
+.bs-feature-pillar-card {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+.bs-feature-pillar-card .bs-feature-title,
+.bs-feature-pillar-card .bs-feature-copy {
+  margin: 0;
+  text-align: left;
+}
+
+@media (min-width: 960px) {
+  .bs-feature-pillars-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
 }

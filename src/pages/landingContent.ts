@@ -16,8 +16,8 @@ export type GalleryScreen = {
 }
 
 export const navLinks = [
-  { href: '#how-it-works', label: 'Workflow' },
-  { href: '#features', label: 'Features' },
+  { href: '#how-it-works', label: 'How It Works' },
+  { href: '#workflow', label: 'Workflow' },
   { href: '#import-export', label: 'Import/Export' },
   { href: '#migration', label: 'Migration' },
   { href: '#beta', label: 'Beta' },
@@ -27,8 +27,8 @@ export const problemPoints = [
   'Different song versions floating around',
   'Last-minute key changes nobody receives',
   'Charts split across PDFs, WhatsApp, and folders',
-  'Setlists change, but the band does not',
-  "Nobody's sure what's performance ready",
+  "Setlists change, but the band doesn't",
+  "Nobody's sure what's 'performance ready'",
 ]
 
 export const workflowSteps = [
@@ -51,18 +51,6 @@ export const workflowSteps = [
 
 export const suiteCards: PreviewCard[] = [
   {
-    title: 'Repertoire Control (Table View)',
-    body: 'Scan your full library, compare readiness, and decide what to rehearse next.',
-    bullets: [
-      'Statuses + tags for fast decisions',
-      'Jump into edit or setlist instantly',
-      'Find rehearsal priorities quickly',
-    ],
-    previewLabel: 'Table',
-    previewSrc: '/ScreenGrabs/BandSong Suite - Table_WebP.webp',
-    previewAlt: 'BandSong Suite repertoire table screen',
-  },
-  {
     title: 'Song Editor',
     body: 'Write and maintain trusted charts with sections, chords, lyrics, notes, and rehearsal status.',
     bullets: [
@@ -73,6 +61,18 @@ export const suiteCards: PreviewCard[] = [
     previewLabel: 'Editor',
     previewSrc: '/ScreenGrabs/BandSong Suite - Editor_WebP.webp',
     previewAlt: 'BandSong Suite song editor screen',
+  },
+  {
+    title: 'Viewer (Live Mode)',
+    body: 'A minimal, stage-ready surface that shows only what musicians need while playing.',
+    bullets: [
+      'Clean chord + lyric display',
+      'Setlist navigation + section awareness',
+      'Live mode optimized for performance',
+    ],
+    previewLabel: 'Viewer',
+    previewSrc: '/ScreenGrabs/BandSong Suite - Viewer Live_WebP.webp',
+    previewAlt: 'BandSong Suite live viewer screen',
   },
   {
     title: 'Setlist Builder',
@@ -87,64 +87,62 @@ export const suiteCards: PreviewCard[] = [
     previewAlt: 'BandSong Suite setlist builder screen',
   },
   {
-    title: 'Viewer (Live Mode)',
-    body: 'A minimal, stage-ready surface that shows only what musicians need while playing.',
+    title: 'Repertoire Control (Table View)',
+    body: 'Scan your full library, compare readiness, and decide what to rehearse next.',
     bullets: [
-      'Clean chord + lyric display',
-      'Setlist navigation + section awareness',
-      'Live mode optimized for performance',
+      'Statuses + tags for fast decisions',
+      'Jump into edit or setlist instantly',
+      'Find rehearsal priorities quickly',
     ],
-    previewLabel: 'Viewer',
-    previewSrc: '/ScreenGrabs/BandSong Suite - Viewer Live_WebP.webp',
-    previewAlt: 'BandSong Suite live viewer screen',
+    previewLabel: 'Table',
+    previewSrc: '/ScreenGrabs/BandSong Suite - Table_WebP.webp',
+    previewAlt: 'BandSong Suite repertoire table screen',
   },
 ]
 
 export const chordIntelligenceCards: PreviewCard[] = [
   {
-    title: 'Chord Library\n(Guitar & Piano voicings)',
-    body: 'Reference practical shapes and voicings that stay tied to the songs you actually use.',
+    title: 'Chord Library (Guitar & Piano voicings)',
+    body: '',
     bullets: [
-      'Browse voicings quickly',
-      'See guitar + piano options',
-      'Stay connected to song context',
+      'Playable voicings, not just names',
+      'Filters by category and instrument',
+      'Designed for rehearsal speed',
     ],
   },
   {
-    title: 'Theory helpers\n(formulas + compatible scales)',
-    body: 'Get just enough harmonic context to make better rehearsal and arrangement decisions.',
+    title: 'Theory helpers (formulas + compatible scales)',
+    body: '',
     bullets: [
-      'Chord formulas at a glance',
-      'Compatible scale guidance',
-      'Useful without theory overload',
+      'Chord structure at a glance',
+      'Scale suggestions for context',
+      'Practical, not academic',
     ],
   },
   {
-    title: 'Song usage intelligence\n(where you use this chord)',
-    body: 'Understand how harmony appears across your actual library, not just in isolation.',
+    title: 'Song usage intelligence',
+    body: '',
     bullets: [
-      'See usage in real songs',
-      'Link chords to arrangements',
-      'Support better set planning',
+      'See where a chord is used',
+      'Spot common progressions',
+      'Understand your repertoire faster',
     ],
   },
 ]
 
+
 export const featurePillars = [
   {
-    label: 'Certainty',
     title: 'Version certainty',
-    copy: 'One trusted chart, one clear publish action, and far less second-guessing before rehearsal starts.',
+    body: 'One trusted version of every song - so rehearsal and stage runs stay consistent.',
   },
   {
-    label: 'Workflow',
     title: 'Rehearsal-to-stage workflow',
-    copy: 'The same system supports editing, planning, and live performance instead of forcing musicians across disconnected tools.',
+    body: 'Edit, plan, and perform from a single calm system built for real band routines.',
   },
   {
-    label: 'Coordination',
     title: 'Cross-device coordination',
-    copy: 'Bands with mixed devices still stay aligned because the workflow is synchronized where it matters most.',
+    body: 'Designed for mixed devices and mixed skill levels - everyone stays aligned.',
   },
 ]
 
@@ -181,23 +179,23 @@ export const importExportCards: PreviewCard[] = [
 export const faqs = [
   {
     question: 'Is BandSong just a chord viewer?',
-    answer: 'No. BandSong Suite is a workflow system that covers editing songs, planning setlists, and performing from a calmer live viewer.',
+    answer: "No - it's a rehearsal and live-performance workflow system: editor, setlists, viewer, repertoire control, and chord tools in one place.",
   },
   {
     question: 'Does it work offline?',
-    answer: 'Yes. BandSong is offline-first, so your songs stay available when internet disappears.',
+    answer: 'Yes. BandSong is offline-first so your songs remain available when internet disappears.',
   },
   {
     question: 'Does it support iOS and Android?',
-    answer: 'Yes. The suite is built for mixed-device groups and keeps charts synchronized across iOS and Android.',
+    answer: 'Yes - the goal is a synced cross-device workflow so every member can participate.',
   },
   {
     question: 'Can I import from OnSong / ChordPro?',
-    answer: 'Yes. BandSong is designed for OnSong and ChordPro workflows, and you can export back out anytime.',
+    answer: 'Yes. Import ChordPro and migrate quickly, with export options so your library stays portable.',
   },
   {
     question: 'Can I customize readability for stage use?',
-    answer: 'Yes. Themes, accent colors, chord rendering styles, and viewer readability controls are part of the stage-focused workflow.',
+    answer: 'Yes - themes, chord rendering, and viewer layout controls help you tune readability for lighting and preference.',
   },
 ]
 
