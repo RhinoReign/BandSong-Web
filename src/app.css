@@ -256,7 +256,7 @@ body {
 }
 
 .bs-showcase-card-title {
-  color: var(--accent-fill);
+  color: var(--text);
 }
 
 .bs-preview-shell {
@@ -635,6 +635,10 @@ body {
   .bs-mobile-panel {
     display: none !important;
   }
+
+  .bs-menu-button {
+    display: none !important;
+  }
 }
 
 @media (max-width: 720px) {
@@ -889,7 +893,7 @@ section[aria-labelledby="problem-title"] .bs-problem-layout > .bs-card {
   display: grid;
   gap: 1rem;
   width: 100%;
-  max-width: min(100%, 74rem);
+  max-width: 100%;
   margin: 2.4rem auto 0;
 }
 
@@ -1091,7 +1095,7 @@ section[aria-labelledby="appearance-title"] .bs-appearance-layout {
   gap: 1.4rem;
   align-items: stretch;
   width: 100%;
-  max-width: min(100%, 74rem);
+  max-width: none;
   margin-inline: auto;
 }
 
@@ -1163,4 +1167,460 @@ section[aria-labelledby="appearance-title"] .bs-appearance-feature .bs-workflow-
 section[aria-labelledby="appearance-title"] .bs-appearance-feature .bs-feature-title,
 section[aria-labelledby="appearance-title"] .bs-appearance-feature .bs-feature-copy {
   grid-column: 2;
+}
+
+
+.bs-trust-badges {
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.bs-trust-layout {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 74rem);
+  margin: 2rem auto 0;
+}
+
+.bs-trust-story-card,
+.bs-trust-proof-grid {
+  width: 100%;
+  min-width: 0;
+}
+
+.bs-trust-story-card {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  border-color: color-mix(in srgb, var(--accent-fill) 30%, var(--border) 70%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 20%, var(--panel) 80%), var(--panel)),
+    var(--panel);
+}
+
+.bs-trust-story-card .bs-panel-label {
+  justify-self: start;
+}
+
+.bs-trust-lead {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-align: left;
+}
+
+.bs-trust-copy {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.bs-trust-copy .bs-feature-copy {
+  margin: 0;
+  text-align: left;
+}
+
+.bs-trust-proof-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.bs-trust-proof-card {
+  display: grid;
+  align-content: start;
+  gap: 0.7rem;
+}
+
+.bs-trust-proof-card .bs-workflow-step-number {
+  justify-self: start;
+}
+
+.bs-trust-proof-card .bs-feature-title,
+.bs-trust-proof-card .bs-feature-copy {
+  margin: 0;
+  text-align: left;
+}
+
+.bs-trust-proof-card-accent {
+  border-color: color-mix(in srgb, var(--accent-fill) 36%, var(--border) 64%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 18%, var(--panel) 82%), var(--panel)),
+    var(--panel);
+  box-shadow:
+    0 18px 38px -30px rgba(0, 0, 0, 0.88),
+    0 10px 24px -20px rgba(0, 0, 0, 0.58);
+}
+
+.bs-trust-proof-card-accent .bs-feature-title {
+  color: var(--accent-fill);
+}
+
+@media (min-width: 960px) {
+  .bs-trust-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.4rem;
+    align-items: stretch;
+  }
+}
+
+
+.bs-trust-proof-card {
+  grid-template-columns: auto 1fr;
+  column-gap: 0.85rem;
+  row-gap: 0.35rem;
+  align-items: start;
+}
+
+.bs-trust-proof-card .bs-workflow-step-number {
+  grid-row: 1 / span 2;
+  align-self: center;
+  justify-self: start;
+}
+
+.bs-trust-proof-card .bs-feature-title,
+.bs-trust-proof-card .bs-feature-copy {
+  grid-column: 2;
+}
+
+
+.bs-migration-badges {
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.bs-migration-layout {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 74rem);
+  margin: 2rem auto 0;
+}
+
+.bs-migration-story-card {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  border-color: color-mix(in srgb, var(--accent-fill) 30%, var(--border) 70%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 18%, var(--panel) 82%), var(--panel)),
+    var(--panel);
+}
+
+.bs-migration-story-card .bs-panel-label {
+  justify-self: start;
+}
+
+.bs-migration-lead {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-align: left;
+}
+
+.bs-migration-copy {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.bs-migration-copy .bs-feature-copy {
+  margin: 0;
+  text-align: left;
+}
+
+.bs-migration-flow {
+  margin-top: 0;
+}
+
+.bs-migration-step .bs-feature-title,
+.bs-migration-step .bs-feature-copy {
+  text-align: left;
+}
+
+.bs-migration-step-accent {
+  border-color: color-mix(in srgb, var(--accent-fill) 36%, var(--border) 64%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 20%, var(--panel) 80%), var(--panel)),
+    var(--panel);
+  box-shadow:
+    0 18px 38px -30px rgba(0, 0, 0, 0.88),
+    0 10px 24px -20px rgba(0, 0, 0, 0.58);
+}
+
+.bs-migration-step-accent .bs-workflow-step-number {
+  border-color: color-mix(in srgb, var(--accent-fill) 56%, var(--border) 44%);
+  background: color-mix(in srgb, var(--accent-soft) 36%, var(--panel) 64%);
+}
+
+.bs-migration-step-accent .bs-feature-title {
+  color: var(--accent-fill);
+}
+
+@media (min-width: 960px) {
+  .bs-migration-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.4rem;
+    align-items: stretch;
+  }
+}
+
+
+.bs-migration-flow {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 960px) {
+  .bs-migration-flow {
+    grid-template-columns: 1fr;
+  }
+
+  .bs-migration-flow::before {
+    display: none;
+  }
+
+  .bs-migration-step:nth-child(2) {
+    transform: none;
+  }
+
+  .bs-migration-step:nth-child(2):hover,
+  .bs-migration-step:nth-child(2):focus-within {
+    transform: translateY(-4px);
+  }
+}
+
+
+.bs-import-badges {
+  justify-content: center;
+  margin-top: 0.25rem;
+}
+
+.bs-import-layout {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 74rem);
+  margin: 2rem auto 0;
+}
+
+.bs-import-story-card {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  border-color: color-mix(in srgb, var(--accent-fill) 30%, var(--border) 70%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 16%, var(--panel) 84%), var(--panel)),
+    var(--panel);
+}
+
+.bs-import-story-card .bs-panel-label {
+  justify-self: start;
+}
+
+.bs-import-lead {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2vw, 1.85rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-align: left;
+}
+
+.bs-import-copy {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.bs-import-copy .bs-feature-copy {
+  margin: 0;
+  text-align: left;
+}
+
+.bs-import-stack {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.bs-import-card {
+  display: grid;
+  align-content: start;
+  gap: 0.8rem;
+}
+
+.bs-import-card-head {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.bs-import-card-head .bs-panel-label {
+  justify-self: start;
+}
+
+.bs-import-card .bs-feature-copy,
+.bs-import-card .bs-problem-item {
+  text-align: left;
+}
+
+.bs-import-card-accent {
+  border-color: color-mix(in srgb, var(--accent-fill) 36%, var(--border) 64%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 18%, var(--panel) 82%), var(--panel)),
+    var(--panel);
+  box-shadow:
+    0 18px 38px -30px rgba(0, 0, 0, 0.88),
+    0 10px 24px -20px rgba(0, 0, 0, 0.58);
+}
+
+
+.bs-import-card-content {
+  display: grid;
+  gap: 1rem;
+}
+
+.bs-import-card-copy {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+}
+
+.bs-import-card-copy .bs-feature-copy {
+  margin: 0;
+}
+
+.bs-import-bullets {
+  align-content: start;
+}
+
+@media (min-width: 960px) {
+  .bs-import-card-content {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 3.6rem;
+    align-items: start;
+  }
+}
+
+
+.bs-import-bullet-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.85rem;
+  align-items: start;
+}
+
+.bs-import-bullet-item .bs-workflow-step-number {
+  min-width: 2rem;
+  min-height: 2rem;
+  font-size: 0.8rem;
+  justify-self: start;
+}
+
+
+.bs-import-bullet-item {
+  padding: 0.7rem 0;
+  align-items: center;
+}
+
+.bs-import-bullet-item span:last-child {
+  display: block;
+  line-height: 1.5;
+}
+
+.bs-import-bullet-item .bs-workflow-step-number {
+  align-self: center;
+}
+
+
+.bs-beta-card {
+  justify-items: center;
+  text-align: center;
+}
+
+.bs-beta-card .bs-panel-label,
+.bs-beta-card .bs-section-title,
+.bs-beta-card .bs-section-copy,
+.bs-beta-card .bs-action-row {
+  justify-self: center;
+  text-align: center;
+}
+
+
+.bs-beta-card {
+  position: relative;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--accent-fill) 26%, var(--border) 74%);
+  background:
+    radial-gradient(circle at 50% 110%, color-mix(in srgb, var(--accent-fill) 10%, transparent), transparent 48%),
+    radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--accent-soft) 22%, transparent), transparent 46%),
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 10%, var(--panel) 90%), var(--panel));
+}
+
+.bs-beta-card .bs-action-row {
+  margin-top: 0.3rem;
+}
+
+.bs-beta-card .bs-button {
+  transition:
+    transform 180ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.bs-beta-card .bs-button:hover,
+.bs-beta-card .bs-button:focus-visible {
+  transform: translateY(-2px);
+  box-shadow:
+    0 16px 32px -20px rgba(0, 0, 0, 0.78),
+    0 8px 18px -16px rgba(0, 0, 0, 0.52);
+}
+
+.bs-beta-note {
+  margin: 0;
+  max-width: 32rem;
+  padding-top: 1rem;
+  color: var(--muted);
+}
+
+
+section[id="faq"] .bs-showcase-card-title {
+  transition: color 180ms ease;
+}
+
+section[id="faq"] .bs-elevated-card:hover .bs-showcase-card-title,
+section[id="faq"] .bs-elevated-card:focus-within .bs-showcase-card-title {
+  color: var(--accent-fill);
+}
+
+
+.bs-button-primary {
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 220ms ease,
+    filter 180ms ease;
+}
+
+.bs-button-primary:hover,
+.bs-button-primary:focus-visible {
+  transform: translateY(-2px) scale(1.015);
+  border-color: color-mix(in srgb, var(--accent-fill) 72%, white 28%);
+  background-color: color-mix(in srgb, var(--accent-fill-hover) 78%, white 22%);
+  box-shadow:
+    0 18px 32px -18px rgba(0, 0, 0, 0.72),
+    0 8px 18px -14px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  filter: saturate(1.08) brightness(1.04);
+}
+
+.bs-button-primary:active {
+  transform: translateY(0) scale(0.995);
+  box-shadow:
+    0 8px 16px -14px rgba(0, 0, 0, 0.52),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  filter: none;
 }

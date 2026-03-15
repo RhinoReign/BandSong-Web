@@ -151,16 +151,16 @@ export const featurePillars = [
 export const importExportCards: PreviewCard[] = [
   {
     title: 'ChordPro import (smart parsing)',
-    body: 'Paste or upload ChordPro and BandSong parses sections, lyrics, and chord lines into a clean, editable song. Common quirks are handled gracefully � inconsistent spacing, repeated section labels, and inline chords.',
+    body: 'Paste or upload ChordPro and BandSong parses sections, lyrics, and chord lines into a clean, editable song. Common quirks are handled gracefully - inconsistent spacing, repeated section labels, and inline chords.',
     bullets: [
       'Understands standard ChordPro directives (titles, sections, comments)',
       'Normalizes spacing so chords align consistently',
-      'Keeps your original text intact � no lock-in formatting',
+      'Keeps your original text intact - no lock-in formatting',
     ],
   },
   {
     title: 'PDF import wizard (guided cleanup)',
-    body: 'Have chord charts stuck in PDFs? Use a guided import flow to extract text, map sections, and review chords before saving. Guided review before saving � nothing is auto-published.',
+    body: 'Have chord charts stuck in PDFs? Use a guided import flow to extract text, map sections, and review chords before saving. Guided review before saving - nothing is auto-published.',
     bullets: [
       'Step-by-step extraction and cleanup',
       'Review screen before saving',

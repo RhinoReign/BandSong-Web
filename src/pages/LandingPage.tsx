@@ -268,7 +268,7 @@ function LandingPage() {
                 <span className="bs-hero-line">Every time.</span>
               </h1>
               <p className="bs-lead bs-lead-hero bs-hero-lead">
-                BandSong Suite is the musician workflow system for rehearsals and live performance. Edit songs, plan setlists, and perform from a calm stage-ready viewer — synced across devices.
+                BandSong Suite is the musician workflow system for rehearsals and live performance. Edit songs, plan setlists, and perform from a calm stage-ready viewer - synced across devices.
               </p>
               <p className="bs-feature-copy bs-hero-note">Songs come first. Calm tools beat feature overload.</p>
               <div className="bs-action-row bs-hero-actions">
@@ -335,7 +335,7 @@ function LandingPage() {
             <div className="bs-section-head">
               <span className="bs-panel-label">Workflow</span>
               <h2 className="bs-section-title">Publish once. Everyone stays aligned.</h2>
-              <p className="bs-section-copy">BandSong keeps one trusted version of every song. When you update a chart or arrangement, your group stays synchronized across devices — with the confidence to rehearse and perform without version guessing.</p>
+              <p className="bs-section-copy">BandSong keeps one trusted version of every song. When you update a chart or arrangement, your group stays synchronized across devices - with the confidence to rehearse and perform without version guessing.</p>
             </div>
             <div className="bs-workflow-flow" aria-label="BandSong workflow">
               {workflowSteps.map((step, index) => (
@@ -404,7 +404,7 @@ function LandingPage() {
             <div className="bs-section-head">
               <span className="bs-panel-label">Song intelligence</span>
               <h2 className="bs-section-title" id="chord-intelligence-title">Chord intelligence, connected to your actual songs.</h2>
-              <p className="bs-section-copy">Explore voicings and harmony in context — not as isolated theory. BandSong links chord tools directly to the songs and setlists you are working on.</p>
+              <p className="bs-section-copy">Explore voicings and harmony in context - not as isolated theory. BandSong links chord tools directly to the songs and setlists you are working on.</p>
             </div>
             <div className="bs-row bs-row-3">
               {chordIntelligenceCards.map((card) => (
@@ -487,13 +487,39 @@ function LandingPage() {
             <div className="bs-section-head">
               <span className="bs-panel-label">Trust</span>
               <h2 className="bs-section-title" id="trust-title">Designed for real bands.</h2>
-              <p className="bs-section-copy">BandSong was built inside a working band — mixed skill levels, different instruments, different devices, and real rehearsal constraints. The interface stays calm, content-first, and performance safe.</p>
-              <p className="bs-feature-copy">Offline-first: your songs stay available when internet disappears.</p>
+              <p className="bs-section-copy">BandSong was built inside a working band - mixed skill levels, different instruments, different devices, and real rehearsal constraints. The interface stays calm, content-first, and performance safe.</p>
+              <div className="bs-badge-row bs-badge-row-tight bs-trust-badges">
+                <span className="bs-code-chip">Offline-first</span>
+                <span className="bs-code-chip">Songs come first</span>
+                <span className="bs-code-chip">Built by a band</span>
+              </div>
             </div>
-            <div className="bs-logo-grid">
-              <div className="bs-code-chip">Offline-first</div>
-              <div className="bs-code-chip">Songs come first</div>
-              <div className="bs-code-chip">Built by a band</div>
+            <div className="bs-trust-layout">
+              <article className="bs-card bs-card-pad bs-trust-story-card">
+                <span className="bs-panel-label bs-panel-label-accent">Real-world use</span>
+                <p className="bs-trust-lead">Built around mixed devices, mixed skill levels, and the real pressure of rehearsals that keep changing.</p>
+                <div className="bs-trust-copy">
+                  <p className="bs-feature-copy">BandSong is not designed for ideal studio conditions. It is designed for the actual band room: a leader making last-minute edits, players arriving on different devices, and everyone needing confidence before the downbeat.</p>
+                  <p className="bs-feature-copy">That is why the product stays content-first, avoids noisy UI, and keeps the trusted version of the song in front of the band.</p>
+                </div>
+              </article>
+              <div className="bs-trust-proof-grid" aria-label="Trust points">
+                <article className="bs-card bs-card-pad bs-trust-proof-card">
+                  <span className="bs-workflow-step-number">01</span>
+                  <h3 className="bs-feature-title">Offline-first</h3>
+                  <p className="bs-feature-copy">Your songs stay available when internet disappears, so rehearsal does not depend on signal quality.</p>
+                </article>
+                <article className="bs-card bs-card-pad bs-trust-proof-card bs-trust-proof-card-accent">
+                  <span className="bs-workflow-step-number">02</span>
+                  <h3 className="bs-feature-title">Performance-safe UI</h3>
+                  <p className="bs-feature-copy">The interface stays calm under pressure, so musicians can read, follow, and play instead of hunting through controls.</p>
+                </article>
+                <article className="bs-card bs-card-pad bs-trust-proof-card">
+                  <span className="bs-workflow-step-number">03</span>
+                  <h3 className="bs-feature-title">Built by a band</h3>
+                  <p className="bs-feature-copy">Real rehearsal constraints shaped the product from the start, not just feature ideas on a roadmap.</p>
+                </article>
+              </div>
             </div>
           </div>
         </section>
@@ -524,12 +550,45 @@ function LandingPage() {
             <div className="bs-section-head">
               <span className="bs-panel-label">Migration</span>
               <h2 className="bs-section-title">Already using OnSong or SongbookPro?</h2>
-              <p className="bs-section-copy">Import ChordPro and migrate your library in minutes. BandSong is designed for OnSong workflows — and you can export back anytime.</p>
+              <p className="bs-section-copy">Import ChordPro and migrate your library in minutes. BandSong is designed for OnSong workflows - and you can export back anytime.</p>
+              <div className="bs-badge-row bs-badge-row-tight bs-migration-badges">
+                <span className="bs-code-chip">OnSong-friendly</span>
+                <span className="bs-code-chip">ChordPro-based</span>
+                <span className="bs-code-chip">Export anytime</span>
+              </div>
             </div>
-            <div className="bs-row bs-row-3">
-              <div className="bs-card bs-card-pad bs-feature bs-card-step"><h3 className="bs-feature-title">Import</h3></div>
-              <div className="bs-card bs-card-pad bs-feature bs-card-step"><h3 className="bs-feature-title">Review</h3></div>
-              <div className="bs-card bs-card-pad bs-feature bs-card-step"><h3 className="bs-feature-title">Publish</h3></div>
+            <div className="bs-migration-layout">
+              <article className="bs-card bs-card-pad bs-migration-story-card">
+                <span className="bs-panel-label bs-panel-label-accent">Switch without drama</span>
+                <p className="bs-migration-lead">Move your existing library over fast, keep control of the review, and publish only when the songs are ready.</p>
+                <div className="bs-migration-copy">
+                  <p className="bs-feature-copy">BandSong is built for teams that already have real charts, real setlists, and existing workflows. The migration path is meant to feel practical, not risky.</p>
+                  <p className="bs-feature-copy">Bring over your material, verify the structure, and land on one trusted version the whole group can use.</p>
+                </div>
+              </article>
+              <div className="bs-workflow-flow bs-migration-flow" aria-label="Migration flow">
+                <article className="bs-card bs-card-pad bs-feature bs-workflow-step bs-migration-step">
+                  <div className="bs-workflow-step-head">
+                    <span className="bs-panel-label bs-panel-label-accent">Import</span>
+                  </div>
+                  <h3 className="bs-feature-title">Bring in your current songs</h3>
+                  <p className="bs-feature-copy">Start with ChordPro and established songbook exports instead of retyping everything by hand.</p>
+                </article>
+                <article className="bs-card bs-card-pad bs-feature bs-workflow-step bs-migration-step bs-migration-step-accent">
+                  <div className="bs-workflow-step-head">
+                    <span className="bs-panel-label bs-panel-label-accent">Review</span>
+                  </div>
+                  <h3 className="bs-feature-title">Check structure before the band sees it</h3>
+                  <p className="bs-feature-copy">Review sections, chords, and formatting so the imported song becomes the version you actually trust.</p>
+                </article>
+                <article className="bs-card bs-card-pad bs-feature bs-workflow-step bs-migration-step">
+                  <div className="bs-workflow-step-head">
+                    <span className="bs-panel-label bs-panel-label-accent">Publish</span>
+                  </div>
+                  <h3 className="bs-feature-title">Roll out one clear version</h3>
+                  <p className="bs-feature-copy">When you are ready, publish once and let the group move forward on the same chart.</p>
+                </article>
+              </div>
             </div>
           </div>
         </section>
@@ -539,27 +598,41 @@ function LandingPage() {
             <div className="bs-section-head">
               <span className="bs-panel-label">Import / Export</span>
               <h2 className="bs-section-title" id="import-export-title">Import and export without the chaos.</h2>
-              <p className="bs-section-copy">BandSong is built to move your existing library over quickly — and keep your songs portable. Import ChordPro, migrate from common songbook apps, and use guided tools when your source is messy.</p>
+              <p className="bs-section-copy">BandSong is built to move your existing library over quickly - and keep your songs portable. Import ChordPro, migrate from common songbook apps, and use guided tools when your source is messy.</p>
+              <div className="bs-badge-row bs-badge-row-tight bs-import-badges">
+                <span className="bs-code-chip">Portable</span>
+                <span className="bs-code-chip">Guided review</span>
+                <span className="bs-code-chip">No lock-in</span>
+              </div>
             </div>
-            <div className="bs-feature-grid bs-import-card-grid">
-              {importExportCards.map((card) => (
-                <article key={card.title} className="bs-card bs-card-pad bs-feature bs-elevated-card">
-                  <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
-                  <p className="bs-feature-copy">{card.body}</p>
-                  <ul className="bs-list-clean bs-showcase-stack" aria-label={`${card.title} benefits`}>
-                    {card.bullets.map((bullet) => (
-                      <li key={bullet} className="bs-problem-item">
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </article>
-              ))}
+            <div className="bs-import-layout">
+              <div className="bs-import-stack" aria-label="Import and export capabilities">
+                {importExportCards.map((card, index) => (
+                  <article key={card.title} className={`bs-card bs-card-pad bs-feature bs-import-card${index === 1 ? ' bs-import-card-accent' : ''}`}>
+                    <div className="bs-import-card-content">
+                      <div className="bs-import-card-copy">
+                        <div className="bs-import-card-head">
+                          <span className="bs-panel-label bs-panel-label-accent">{index === 0 ? 'Import' : index === 1 ? 'Review' : 'Export'}</span>
+                          <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
+                        </div>
+                        <p className="bs-feature-copy">{card.body}</p>
+                      </div>
+                      <ul className="bs-list-clean bs-showcase-stack bs-import-bullets" aria-label={`${card.title} benefits`}>
+                        {card.bullets.map((bullet, bulletIndex) => (
+                          <li key={bullet} className="bs-problem-item bs-import-bullet-item">
+                            <span className="bs-workflow-step-number">0{bulletIndex + 1}</span>
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </article>
+                ))}
+              </div>
             </div>
             <p className="bs-feature-copy bs-import-note">No lock-in. Your songs remain portable.</p>
           </div>
         </section>
-
         <section className="bs-section" id="beta">
           <div className="bs-shell">
             <div className="bs-card bs-card-pad bs-beta-card">
@@ -571,6 +644,7 @@ function LandingPage() {
                   Join the Beta
                 </button>
               </div>
+              <p className="bs-feature-copy bs-beta-note">Early access, thoughtful updates, and a clear way to shape the product.</p>
             </div>
           </div>
         </section>
@@ -602,7 +676,7 @@ function LandingPage() {
             <a className="bs-link bs-focus-ring" href="mailto:hello@bandsong.app">Contact</a>
             <a className="bs-link bs-focus-ring" href="#beta">Beta</a>
           </nav>
-          <p>© {currentYear} BandSong</p>
+          <p>(c) {currentYear} BandSong</p>
         </div>
       </footer>
 
