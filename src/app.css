@@ -672,6 +672,21 @@ body {
 }
 
 @media (max-width: 720px) {
+  .bs-landing::before,
+  .bs-landing::after {
+    display: none;
+  }
+
+  .bs-site-header {
+    backdrop-filter: none;
+  }
+
+  .bs-hero-tempo-dot {
+    animation: none;
+    text-shadow: none;
+    will-change: auto;
+  }
+
   .bs-modal-head,
   .bs-gallery-slider-head {
     width: 100%;
@@ -1780,6 +1795,29 @@ section[id="faq"] .bs-showcase-card-title {
 }
 
 
+
+@media (max-width: 720px) {
+  .bs-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+
+  .bs-problem-list-card::before,
+  .bs-workflow-card::before,
+  .bs-feature-pillar-card::before,
+  .bs-trust-proof-card:not(.bs-trust-proof-card-accent)::before,
+  .bs-migration-step:not(.bs-migration-step-accent)::before,
+  .bs-import-card:not(.bs-import-card-accent)::before,
+  .bs-intelligence-card::before,
+  section[aria-labelledby="appearance-title"] .bs-appearance-feature::before,
+  section[id="faq"] .bs-elevated-card::before {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 .bs-workflow-card.is-clickable,
 .bs-appearance-preview-card.is-clickable {
   cursor: zoom-in;
@@ -1878,3 +1916,4 @@ section[id="faq"] .bs-elevated-card::before {
     --bs-outline-angle: 360deg;
   }
 }
+

@@ -56,6 +56,8 @@ function PreviewFrame({
               alt={alt}
               width="1920"
               height="945"
+              loading="lazy"
+              decoding="async"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               onError={() => setHasImageError(true)}
             />
@@ -84,3 +86,4 @@ function PreviewFrame({
 }
 
 export default PreviewFrame
+

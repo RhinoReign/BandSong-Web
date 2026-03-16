@@ -100,16 +100,19 @@ function LandingPage() {
 
     let frameId = 0
 
+    const syncGlow = () => {
+      landingElement.style.setProperty('--bs-glow-x', `${current.x.toFixed(1)}px`)
+      landingElement.style.setProperty('--bs-glow-y', `${current.y.toFixed(1)}px`)
+      landingElement.style.setProperty('--bs-glow-opacity', current.opacity.toFixed(3))
+    }
+
     const render = () => {
       const smoothing = mediaQuery.matches ? 1 : 0.02
       current.x += (target.x - current.x) * smoothing
       current.y += (target.y - current.y) * smoothing
       current.opacity += (target.opacity - current.opacity) * (mediaQuery.matches ? 1 : 0.04)
 
-      landingElement.style.setProperty('--bs-glow-x', `${current.x.toFixed(1)}px`)
-      landingElement.style.setProperty('--bs-glow-y', `${current.y.toFixed(1)}px`)
-      landingElement.style.setProperty('--bs-glow-opacity', current.opacity.toFixed(3))
-
+      syncGlow()
       frameId = window.requestAnimationFrame(render)
     }
 
@@ -129,13 +132,25 @@ function LandingPage() {
       target.opacity = isFinePointer ? 0.34 : 0.24
     }
 
-    frameId = window.requestAnimationFrame(render)
-
     if (isFinePointer) {
+      frameId = window.requestAnimationFrame(render)
       window.addEventListener('pointermove', onPointerMove)
       window.addEventListener('pointerleave', resetGlow)
     } else {
       resetGlow()
+      current.x = target.x
+      current.y = target.y
+      current.opacity = target.opacity
+      syncGlow()
+    }
+
+    window.addEventListener('resize', resetGlow)
+
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerleave', resetGlow)
+      window.removeEventListener('resize', resetGlow)
     }
 
     window.addEventListener('resize', resetGlow)
@@ -335,16 +350,20 @@ function LandingPage() {
                     Watch Demo
                   </button>
                   <div className={`bs-hero-product-tooltip${showHeroProductPreview ? ' is-visible' : ''}`} aria-hidden={showHeroProductPreview ? 'false' : 'true'}>
-                    <div className="bs-card bs-card-pad bs-hero-product-card">
-                      <span className="bs-panel-label">Suite Preview (Editor - Viewer - Setlist)</span>
-                      <img
-                        className="bs-hero-product-image"
-                        src="/ScreenGrabs/BandSong Suite - Editor_WebP.webp"
-                        alt="BandSong Suite editor preview"
-                        width="1920"
-                        height="945"
-                      />
-                    </div>
+                    {showHeroProductPreview ? (
+                      <div className="bs-card bs-card-pad bs-hero-product-card">
+                        <span className="bs-panel-label">Suite Preview (Editor - Viewer - Setlist)</span>
+                        <img
+                          className="bs-hero-product-image"
+                          src="/ScreenGrabs/BandSong Suite - Editor_WebP.webp"
+                          alt="BandSong Suite editor preview"
+                          width="1920"
+                          height="945"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -852,6 +871,8 @@ function LandingPage() {
 }
 
 export default LandingPage
+
+
 
 
 
