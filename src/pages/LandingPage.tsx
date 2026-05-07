@@ -4,8 +4,8 @@ import PreviewFrame from '../components/PreviewFrame'
 import {
   chordIntelligenceCards,
   crewAccessCards,
-  faqs,
   featurePillars,
+  faqs,
   galleryScreens,
   importExportCards,
   navLinks,
@@ -57,6 +57,19 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
 }
 
+function handleCardKeyDown(event: React.KeyboardEvent<HTMLElement>, onOpen?: () => void) {
+  if (!onOpen) {
+    return
+  }
+
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault()
+    onOpen()
+  }
+}
+
+const betaInbox = 'hello@bandsong.app'
+
 function LandingPage() {
   const landingRef = useRef<HTMLDivElement | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -102,16 +115,19 @@ function LandingPage() {
 
     let frameId = 0
 
+    const syncGlow = () => {
+      landingElement.style.setProperty('--bs-glow-x', `${current.x.toFixed(1)}px`)
+      landingElement.style.setProperty('--bs-glow-y', `${current.y.toFixed(1)}px`)
+      landingElement.style.setProperty('--bs-glow-opacity', current.opacity.toFixed(3))
+    }
+
     const render = () => {
       const smoothing = mediaQuery.matches ? 1 : 0.02
       current.x += (target.x - current.x) * smoothing
       current.y += (target.y - current.y) * smoothing
       current.opacity += (target.opacity - current.opacity) * (mediaQuery.matches ? 1 : 0.04)
 
-      landingElement.style.setProperty('--bs-glow-x', `${current.x.toFixed(1)}px`)
-      landingElement.style.setProperty('--bs-glow-y', `${current.y.toFixed(1)}px`)
-      landingElement.style.setProperty('--bs-glow-opacity', current.opacity.toFixed(3))
-
+      syncGlow()
       frameId = window.requestAnimationFrame(render)
     }
 
@@ -131,13 +147,25 @@ function LandingPage() {
       target.opacity = isFinePointer ? 0.34 : 0.24
     }
 
-    frameId = window.requestAnimationFrame(render)
-
     if (isFinePointer) {
+      frameId = window.requestAnimationFrame(render)
       window.addEventListener('pointermove', onPointerMove)
       window.addEventListener('pointerleave', resetGlow)
     } else {
       resetGlow()
+      current.x = target.x
+      current.y = target.y
+      current.opacity = target.opacity
+      syncGlow()
+    }
+
+    window.addEventListener('resize', resetGlow)
+
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerleave', resetGlow)
+      window.removeEventListener('resize', resetGlow)
     }
 
     window.addEventListener('resize', resetGlow)
@@ -164,6 +192,40 @@ function LandingPage() {
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [mobileOpen])
+
+  useEffect(() => {
+    const root = landingRef.current
+    if (!root) {
+      return undefined
+    }
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const targets = Array.from(root.querySelectorAll<HTMLElement>('[data-reveal]'))
+
+    if (reduceMotion.matches) {
+      targets.forEach((element) => element.classList.add('is-visible'))
+      return undefined
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      {
+        threshold: 0.16,
+        rootMargin: '0px 0px -8% 0px',
+      },
+    )
+
+    targets.forEach((element) => observer.observe(element))
+
+    return () => observer.disconnect()
+  }, [])
 
   const previousSlide = () => {
     setGalleryDirection(-1)
@@ -229,8 +291,12 @@ function LandingPage() {
       return
     }
 
+    const subject = encodeURIComponent('BandSong Beta')
+    const body = encodeURIComponent(`Beta signup email: ${email}`)
+
     setEmailError('')
     setBetaSuccess(true)
+    window.location.href = `mailto:${betaInbox}?subject=${subject}&body=${body}`
   }
 
   return (
@@ -280,7 +346,7 @@ function LandingPage() {
               <h1 className="bs-display bs-hero-display">
                 <span className="bs-hero-line">Everyone plays</span>
                 <span className="bs-hero-line">the same version.</span>
-                <span className="bs-hero-line">Every time.</span>
+                <span className="bs-hero-line">Every time<span className="bs-hero-tempo-dot">.</span></span>
               </h1>
               <p className="bs-lead bs-lead-hero bs-hero-lead">
                 BandSong Suite is the musician workflow system for rehearsals and live performance. Edit songs, plan setlists, and perform from a calm stage-ready viewer - synced across devices.
@@ -296,19 +362,23 @@ function LandingPage() {
                   onMouseLeave={() => setShowHeroProductPreview(false)}
                 >
                   <button type="button" className="bs-button bs-button-secondary bs-focus-ring" onClick={() => openGallery(0)}>
-                    See Product
+                    Watch Demo
                   </button>
                   <div className={`bs-hero-product-tooltip${showHeroProductPreview ? ' is-visible' : ''}`} aria-hidden={showHeroProductPreview ? 'false' : 'true'}>
-                    <div className="bs-card bs-card-pad bs-hero-product-card">
-                      <span className="bs-panel-label">Editor Preview</span>
-                      <img
-                        className="bs-hero-product-image"
-                        src="/ScreenGrabs/BandSong Suite - Editor_WebP.webp"
-                        alt="BandSong Suite editor preview"
-                        width="1920"
-                        height="945"
-                      />
-                    </div>
+                    {showHeroProductPreview ? (
+                      <div className="bs-card bs-card-pad bs-hero-product-card">
+                        <span className="bs-panel-label">Suite Preview (Editor - Viewer - Setlist)</span>
+                        <img
+                          className="bs-hero-product-image"
+                          src="/ScreenGrabs/BandSong Suite - Editor_WebP.webp"
+                          alt="BandSong Suite editor preview"
+                          width="1920"
+                          height="945"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -316,7 +386,7 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section" aria-labelledby="problem-title">
+        <section className="bs-section bs-reveal" data-reveal aria-labelledby="problem-title">
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Reality check</span>
@@ -345,7 +415,7 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section" id="how-it-works"> 
+        <section className="bs-section bs-reveal" data-reveal id="how-it-works"> 
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Workflow</span>
@@ -354,7 +424,7 @@ function LandingPage() {
             </div>
             <div className="bs-workflow-flow" aria-label="BandSong workflow">
               {workflowSteps.map((step, index) => (
-                <article key={step.title} className="bs-card bs-card-pad bs-feature bs-workflow-step">
+                <article key={step.title} className="bs-card bs-card-pad bs-feature bs-workflow-step bs-reveal" data-reveal>
                   <div className="bs-workflow-step-head">
                     <span className="bs-workflow-step-number">0{index + 1}</span>
                     <span className="bs-panel-label bs-panel-label-accent">{step.label}</span>
@@ -368,44 +438,47 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section" id="features" aria-labelledby="suite-title">
+        <section className="bs-section bs-reveal" data-reveal id="workflow" aria-labelledby="suite-title">
           <div className="bs-shell">
             <div className="bs-section-head">
-              <span className="bs-panel-label">Product proof</span>
+              <span className="bs-panel-label">Workflow</span>
               <h2 className="bs-section-title" id="suite-title">A complete workflow - not just a chord viewer.</h2>
             </div>
-            <div className="bs-suite-rows">
-              {suiteCards.map((card, index) => {
+            <div className="bs-workflow-grid" aria-label="BandSong Suite workflow tools">
+              {suiteCards.map((card) => {
                 const previewSrc = card.previewSrc
-                const imageFirst = index % 2 === 0
+                const openCardViewer = previewSrc
+                  ? () => openViewer(previewSrc, card.previewAlt ?? card.title, card.previewLabel ?? card.title)
+                  : undefined
 
                 return (
-                  <article key={card.title} className={`bs-suite-row${imageFirst ? ' is-image-first' : ' is-image-last'}`}>
-                    <div className="bs-suite-media">
-                      <PreviewFrame
-                        variant="card"
-                        src={previewSrc}
-                        alt={card.previewAlt ?? card.title}
-                        label={card.previewLabel}
-                        onOpen={
-                          previewSrc
-                            ? () => openViewer(previewSrc, card.previewAlt ?? card.title, card.previewLabel ?? card.title)
-                            : undefined
-                        }
-                      />
-                    </div>
-                    <div className="bs-card bs-card-pad bs-feature bs-showcase-card bs-suite-copy-card">
-                      <div className="bs-showcase-copy">
-                        <h3 className="bs-feature-title bs-showcase-card-title">{card.title.split("\n").map((line) => (<span key={line} className="bs-title-line">{line}</span>))}</h3>
-                        <p className="bs-feature-copy">{card.body}</p>
-                        <ul className="bs-list-clean bs-showcase-stack" aria-label={`${card.title} capabilities`}>
-                          {card.bullets.map((bullet) => (
-                            <li key={bullet} className="bs-problem-item">
-                              <span>{bullet}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                  <article
+                    key={card.title}
+                    className={`bs-card bs-card-pad bs-feature bs-showcase-card bs-workflow-card bs-reveal${openCardViewer ? ' is-clickable' : ''}`}
+                    data-reveal
+                    role={openCardViewer ? 'button' : undefined}
+                    tabIndex={openCardViewer ? 0 : undefined}
+                    aria-label={openCardViewer ? `Open ${card.title} in large viewer` : undefined}
+                    onClick={openCardViewer}
+                    onKeyDown={(event) => handleCardKeyDown(event, openCardViewer)}
+                  >
+                    <PreviewFrame
+                      variant="card"
+                      src={previewSrc}
+                      alt={card.previewAlt ?? card.title}
+                      label={card.previewLabel}
+                      onOpen={openCardViewer}
+                    />
+                    <div className="bs-showcase-copy">
+                      <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
+                      <p className="bs-feature-copy">{card.body}</p>
+                      <ul className="bs-list-clean bs-showcase-stack" aria-label={`${card.title} capabilities`}>
+                        {card.bullets.map((bullet) => (
+                          <li key={bullet} className="bs-problem-item">
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </article>
                 )
@@ -414,23 +487,21 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section bs-section-tight" aria-labelledby="chord-intelligence-title">
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="chords" aria-labelledby="chord-intelligence-title">
           <div className="bs-shell">
-            <div className="bs-section-head">
-              <span className="bs-panel-label">Song intelligence</span>
+            <div className="bs-section-head bs-section-head-compact">
+              <span className="bs-panel-label">Chords</span>
               <h2 className="bs-section-title" id="chord-intelligence-title">Chord intelligence, connected to your actual songs.</h2>
-              <p className="bs-section-copy">Explore voicings and harmony in context - not as isolated theory. BandSong links chord tools directly to the songs and setlists you are working on.</p>
+              <p className="bs-section-copy">Explore voicings and harmony in context - not as isolated theory. BandSong links chord tools directly to the songs and setlists you're working on.</p>
             </div>
-            <div className="bs-row bs-row-3">
+            <div className="bs-intelligence-strip" aria-label="Song intelligence capabilities">
               {chordIntelligenceCards.map((card) => (
-                <article key={card.title} className="bs-card bs-card-pad bs-feature bs-elevated-card bs-song-intelligence-card">
-                  <h3 className="bs-feature-title bs-showcase-card-title">{card.title.split("\n").map((line) => (<span key={line} className="bs-title-line">{line}</span>))}</h3>
-                  <p className="bs-feature-copy">{card.body}</p>
-                  <ul className="bs-list-clean bs-showcase-stack" aria-label={`${card.title} details`}>
+                <article key={card.title} className="bs-card bs-card-pad bs-intelligence-card bs-reveal" data-reveal>
+                  <h3 className="bs-feature-title bs-showcase-card-title">{card.title}</h3>
+                  {card.body ? <p className="bs-feature-copy">{card.body}</p> : null}
+                  <ul className="bs-list-clean bs-intelligence-points" aria-label={`${card.title} details`}>
                     {card.bullets.map((bullet) => (
-                      <li key={bullet} className="bs-problem-item">
-                        <span>{bullet}</span>
-                      </li>
+                      <li key={bullet} className="bs-intelligence-point">{bullet}</li>
                     ))}
                   </ul>
                 </article>
@@ -439,7 +510,8 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section bs-section-tight" aria-labelledby="appearance-title">
+
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="readability" aria-labelledby="appearance-title">
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Appearance & Readability</span>
@@ -460,7 +532,7 @@ function LandingPage() {
                 <div className="bs-appearance-feature-grid" aria-label="Readability controls">
                   <article className="bs-appearance-feature">
                     <span className="bs-workflow-step-number">01</span>
-                    <h3 className="bs-feature-title">Theme + accent system</h3>
+                    <h3 className="bs-feature-title">Theme selection + accent color system</h3>
                     <p className="bs-feature-copy">Choose the overall feel and contrast profile that fits the room.</p>
                   </article>
                   <article className="bs-appearance-feature">
@@ -470,12 +542,33 @@ function LandingPage() {
                   </article>
                   <article className="bs-appearance-feature">
                     <span className="bs-workflow-step-number">03</span>
-                    <h3 className="bs-feature-title">Readability + layout controls</h3>
+                    <h3 className="bs-feature-title">Viewer readability + layout controls</h3>
                     <p className="bs-feature-copy">Dial in spacing, density, and layout for rehearsal or stage use.</p>
                   </article>
                 </div>
               </div>
-              <aside className="bs-card bs-card-pad bs-showcase-stack bs-appearance-preview-card" aria-label="Viewer readability preview">
+              <aside
+                className="bs-card bs-card-pad bs-showcase-stack bs-appearance-preview-card is-clickable"
+                aria-label="Viewer readability preview"
+                role="button"
+                tabIndex={0}
+                onClick={() =>
+                  openViewer(
+                    '/ScreenGrabs/BandSong Suite - Settings_WebP.webp',
+                    'BandSong Suite appearance and settings screen',
+                    'Viewer Readability Preview',
+                  )
+                }
+                onKeyDown={(event) =>
+                  handleCardKeyDown(event, () =>
+                    openViewer(
+                      '/ScreenGrabs/BandSong Suite - Settings_WebP.webp',
+                      'BandSong Suite appearance and settings screen',
+                      'Viewer Readability Preview',
+                    ),
+                  )
+                }
+              >
                 <div className="bs-appearance-preview-head">
                   <span className="bs-panel-label bs-panel-label-accent">Stage preview</span>
                   <p className="bs-feature-copy">Tune the viewer for dark rooms, bright stages, and different reading preferences.</p>
@@ -497,7 +590,7 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section bs-section-tight" aria-labelledby="trust-title">
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal aria-labelledby="trust-title">
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Trust</span>
@@ -512,24 +605,24 @@ function LandingPage() {
             <div className="bs-trust-layout">
               <article className="bs-card bs-card-pad bs-trust-story-card">
                 <span className="bs-panel-label bs-panel-label-accent">Real-world use</span>
-                <p className="bs-trust-lead">Built around mixed devices, mixed skill levels, and the real pressure of rehearsals that keep changing.</p>
+                <p className="bs-trust-lead">Offline-first: your songs stay available when internet disappears.</p>
                 <div className="bs-trust-copy">
                   <p className="bs-feature-copy">BandSong is not designed for ideal studio conditions. It is designed for the actual band room: a leader making last-minute edits, players arriving on different devices, and everyone needing confidence before the downbeat.</p>
                   <p className="bs-feature-copy">That is why the product stays content-first, avoids noisy UI, and keeps the trusted version of the song in front of the band.</p>
                 </div>
               </article>
               <div className="bs-trust-proof-grid" aria-label="Trust points">
-                <article className="bs-card bs-card-pad bs-trust-proof-card">
+                <article className="bs-card bs-card-pad bs-trust-proof-card bs-reveal" data-reveal>
                   <span className="bs-workflow-step-number">01</span>
                   <h3 className="bs-feature-title">Offline-first</h3>
                   <p className="bs-feature-copy">Your songs stay available when internet disappears, so rehearsal does not depend on signal quality.</p>
                 </article>
-                <article className="bs-card bs-card-pad bs-trust-proof-card bs-trust-proof-card-accent">
+                <article className="bs-card bs-card-pad bs-trust-proof-card bs-trust-proof-card-accent bs-reveal" data-reveal>
                   <span className="bs-workflow-step-number">02</span>
                   <h3 className="bs-feature-title">Performance-safe UI</h3>
                   <p className="bs-feature-copy">The interface stays calm under pressure, so musicians can read, follow, and play instead of hunting through controls.</p>
                 </article>
-                <article className="bs-card bs-card-pad bs-trust-proof-card">
+                <article className="bs-card bs-card-pad bs-trust-proof-card bs-reveal" data-reveal>
                   <span className="bs-workflow-step-number">03</span>
                   <h3 className="bs-feature-title">Built by a band</h3>
                   <p className="bs-feature-copy">Real rehearsal constraints shaped the product from the start, not just feature ideas on a roadmap.</p>
@@ -539,32 +632,28 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section bs-section-tight" aria-labelledby="pillars-title">
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="features" aria-labelledby="features-title">
           <div className="bs-shell">
-            <div className="bs-section-head">
-              <span className="bs-panel-label">Why it matters</span>
-              <h2 className="bs-section-title" id="pillars-title">The workflow stays calm because the system stays clear.</h2>
+            <div className="bs-section-head bs-section-head-compact">
+              <span className="bs-panel-label">Features</span>
+              <h2 className="bs-section-title" id="features-title">Why BandSong stays clear when rehearsals change.</h2>
             </div>
-            <div className="bs-workflow-flow bs-pillars-flow" aria-label="Why it matters">
-              {featurePillars.map((feature, index) => (
-                <article key={feature.title} className="bs-card bs-card-pad bs-feature bs-workflow-step bs-pillars-step">
-                  <div className="bs-workflow-step-head">
-                    <span className="bs-workflow-step-number">0{index + 1}</span>
-                    <span className="bs-panel-label bs-panel-label-accent">{feature.label}</span>
-                  </div>
-                  <h3 className="bs-feature-title">{feature.title}</h3>
-                  <p className="bs-feature-copy">{feature.copy}</p>
+            <div className="bs-feature-pillars-grid" aria-label="BandSong feature pillars">
+              {featurePillars.map((feature) => (
+                <article key={feature.title} className="bs-card bs-card-pad bs-feature bs-elevated-card bs-feature-pillar-card bs-reveal" data-reveal>
+                  <h3 className="bs-feature-title bs-showcase-card-title">{feature.title}</h3>
+                  <p className="bs-feature-copy">{feature.body}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="bs-section" id="migration">
+        <section className="bs-section bs-reveal" data-reveal id="migration" aria-labelledby="migration-title">
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Migration</span>
-              <h2 className="bs-section-title">Already using OnSong or SongbookPro?</h2>
+              <h2 className="bs-section-title" id="migration-title">Already using OnSong or SongbookPro?</h2>
               <p className="bs-section-copy">Import ChordPro and migrate your library in minutes. BandSong is designed for OnSong workflows - and you can export back anytime.</p>
               <div className="bs-badge-row bs-badge-row-tight bs-migration-badges">
                 <span className="bs-code-chip">OnSong-friendly</span>
@@ -582,7 +671,7 @@ function LandingPage() {
                 </div>
               </article>
               <div className="bs-workflow-flow bs-migration-flow" aria-label="Migration flow">
-                <article className="bs-card bs-card-pad bs-feature bs-workflow-step bs-migration-step">
+                <article className="bs-card bs-card-pad bs-feature bs-workflow-step bs-migration-step bs-reveal" data-reveal>
                   <div className="bs-workflow-step-head">
                     <span className="bs-panel-label bs-panel-label-accent">Import</span>
                   </div>
@@ -596,7 +685,7 @@ function LandingPage() {
                   <h3 className="bs-feature-title">Check structure before the band sees it</h3>
                   <p className="bs-feature-copy">Review sections, chords, and formatting so the imported song becomes the version you actually trust.</p>
                 </article>
-                <article className="bs-card bs-card-pad bs-feature bs-workflow-step bs-migration-step">
+                <article className="bs-card bs-card-pad bs-feature bs-workflow-step bs-migration-step bs-reveal" data-reveal>
                   <div className="bs-workflow-step-head">
                     <span className="bs-panel-label bs-panel-label-accent">Publish</span>
                   </div>
@@ -608,7 +697,7 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section" id="import-export" aria-labelledby="import-export-title">
+        <section className="bs-section bs-reveal" data-reveal id="import-export" aria-labelledby="import-export-title">
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Import / Export</span>
@@ -623,7 +712,7 @@ function LandingPage() {
             <div className="bs-import-layout">
               <div className="bs-import-stack" aria-label="Import and export capabilities">
                 {importExportCards.map((card, index) => (
-                  <article key={card.title} className={`bs-card bs-card-pad bs-feature bs-import-card${index === 1 ? ' bs-import-card-accent' : ''}`}>
+                  <article key={card.title} className={`bs-card bs-card-pad bs-feature bs-import-card bs-reveal${index === 1 ? ' bs-import-card-accent' : ''}`} data-reveal>
                     <div className="bs-import-card-content">
                       <div className="bs-import-card-copy">
                         <div className="bs-import-card-head">
@@ -649,7 +738,7 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section bs-section-tight" id="crew-access" aria-labelledby="crew-access-title">
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="crew-access" aria-labelledby="crew-access-title">
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Crew Access</span>
@@ -660,7 +749,7 @@ function LandingPage() {
             </div>
 
             <div className="bs-crew-layout">
-              <article className="bs-card bs-card-pad bs-crew-story-card">
+              <article className="bs-card bs-card-pad bs-crew-story-card bs-reveal" data-reveal>
                 <span className="bs-panel-label bs-panel-label-accent">Early subscriber benefit</span>
                 <p className="bs-crew-lead">
                   During BandSong’s early subscription period, Crew Access is included for active BandSong subscribers.
@@ -680,7 +769,7 @@ function LandingPage() {
 
               <div className="bs-crew-role-grid" aria-label="Crew Access roles">
                 {crewAccessCards.map((card, index) => (
-                  <article key={card.role} className={`bs-card bs-card-pad bs-crew-role-card${index === 1 ? ' bs-crew-role-card-accent' : ''}`}>
+                  <article key={card.role} className={`bs-card bs-card-pad bs-crew-role-card bs-reveal${index === 1 ? ' bs-crew-role-card-accent' : ''}`} data-reveal>
                     <span className="bs-workflow-step-number">0{index + 1}</span>
                     <h3 className="bs-feature-title">{card.role}</h3>
                     <p className="bs-feature-copy">{card.copy}</p>
@@ -691,7 +780,7 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section bs-section-tight" id="pricing" aria-labelledby="pricing-title">
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="pricing" aria-labelledby="pricing-title">
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Pricing</span>
@@ -705,7 +794,8 @@ function LandingPage() {
               {pricingTiers.map((tier) => (
                 <article
                   key={tier.name}
-                  className={`bs-card bs-card-pad bs-pricing-card${tier.highlighted ? ' bs-pricing-card-featured' : ''}${tier.contact ? ' bs-pricing-card-elite' : ''}`}
+                  className={`bs-card bs-card-pad bs-pricing-card bs-reveal${tier.highlighted ? ' bs-pricing-card-featured' : ''}${tier.contact ? ' bs-pricing-card-elite' : ''}`}
+                  data-reveal
                 >
                   <div className="bs-pricing-card-head">
                     <div className="bs-pricing-tier-row">
@@ -754,9 +844,9 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section" id="beta">
+        <section className="bs-section bs-reveal" data-reveal id="beta">
           <div className="bs-shell">
-            <div className="bs-card bs-card-pad bs-beta-card">
+            <div className="bs-card bs-card-pad bs-beta-card bs-reveal" data-reveal>
               <span className="bs-panel-label bs-panel-label-accent">Beta</span>
               <h2 className="bs-section-title">Join the BandSong beta.</h2>
               <p className="bs-section-copy">Get early access, help shape the workflow, and bring your group into a cleaner way of sharing music.</p>
@@ -770,7 +860,7 @@ function LandingPage() {
           </div>
         </section>
 
-        <section className="bs-section" id="faq">
+        <section className="bs-section bs-reveal" data-reveal id="faq">
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">FAQ</span>
@@ -778,7 +868,7 @@ function LandingPage() {
             </div>
             <div className="bs-showcase-stack">
               {faqs.map((item) => (
-                <article key={item.question} className="bs-card bs-card-pad bs-feature bs-elevated-card">
+                <article key={item.question} className="bs-card bs-card-pad bs-feature bs-elevated-card bs-reveal" data-reveal>
                   <h3 className="bs-feature-title bs-showcase-card-title">{item.question}</h3>
                   <p className="bs-feature-copy">{item.answer}</p>
                 </article>
@@ -813,8 +903,8 @@ function LandingPage() {
       <Modal open={betaOpen} title="Join the BandSong Beta" onClose={closeBetaModal}>
         {betaSuccess ? (
           <div className="bs-showcase-stack">
-            <p className="bs-section-copy">Thanks. You are on the beta interest list for this session.</p>
-            <p className="bs-feature-copy">If you prefer email, you can still reach us directly at hello@bandsong.app.</p>
+            <p className="bs-section-copy">Your email draft has been prepared for beta signup.</p>
+            <p className="bs-feature-copy">If your mail app did not open, you can still reach us directly at hello@bandsong.app.</p>
           </div>
         ) : (
           <form className="bs-showcase-stack" onSubmit={handleBetaSubmit} noValidate>
@@ -911,5 +1001,9 @@ function LandingPage() {
 }
 
 export default LandingPage
+
+
+
+
 
 

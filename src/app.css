@@ -168,7 +168,7 @@ body {
 }
 
 .bs-skip-link:focus-visible {
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 .bs-list-clean {
@@ -219,8 +219,10 @@ body {
     box-shadow 240ms ease;
 }
 
-.bs-showcase-card:hover,
-.bs-showcase-card:focus-within {
+.bs-showcase-card.is-clickable:hover,
+.bs-showcase-card.is-clickable:focus-visible,
+.bs-appearance-preview-card.is-clickable:hover,
+.bs-appearance-preview-card.is-clickable:focus-visible {
   transform: translateY(-6px);
   border-color: color-mix(in srgb, var(--accent-fill) 38%, var(--border) 62%);
   box-shadow:
@@ -228,14 +230,6 @@ body {
     0 10px 28px -22px rgba(0, 0, 0, 0.65);
 }
 
-.bs-elevated-card:hover,
-.bs-elevated-card:focus-within {
-  transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--accent-fill) 34%, var(--border) 66%);
-  box-shadow:
-    0 16px 34px -28px rgba(0, 0, 0, 0.82),
-    0 8px 20px -18px rgba(0, 0, 0, 0.58);
-}
 
 .bs-card-step {
   transition:
@@ -243,11 +237,6 @@ body {
     border-color 200ms ease;
 }
 
-.bs-card-step:hover,
-.bs-card-step:focus-within {
-  transform: translateY(-2px);
-  border-color: color-mix(in srgb, var(--accent-fill) 24%, var(--border) 76%);
-}
 
 .bs-showcase-copy {
   display: grid;
@@ -539,6 +528,47 @@ body {
   display: block;
 }
 
+.bs-hero-tempo-dot {
+  display: inline-block;
+  color: var(--accent-fill);
+  transform-origin: 50% 60%;
+  transform: translateZ(0) scale(1);
+  backface-visibility: hidden;
+  animation: bsTempoPulse 1.2s cubic-bezier(0.2, 0.9, 0.28, 1) infinite;
+  will-change: transform, opacity, text-shadow;
+}
+
+@keyframes bsTempoPulse {
+  0%,
+  18%,
+  100% {
+    transform: translateZ(0) scale(1);
+    opacity: 0.9;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+
+  32% {
+    transform: translateZ(0) scale(1.16);
+    opacity: 1;
+    text-shadow:
+      0 0 14px color-mix(in srgb, var(--accent-fill) 28%, transparent),
+      0 0 22px color-mix(in srgb, var(--accent-fill) 14%, transparent);
+  }
+
+  52% {
+    transform: translateZ(0) scale(1.03);
+    opacity: 0.95;
+    text-shadow:
+      0 0 6px color-mix(in srgb, var(--accent-fill) 12%, transparent);
+  }
+
+  68% {
+    transform: translateZ(0) scale(1);
+    opacity: 0.9;
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
 .bs-hero-lead {
   max-width: 46rem;
   margin-top: 0;
@@ -642,6 +672,21 @@ body {
 }
 
 @media (max-width: 720px) {
+  .bs-landing::before,
+  .bs-landing::after {
+    display: none;
+  }
+
+  .bs-site-header {
+    backdrop-filter: none;
+  }
+
+  .bs-hero-tempo-dot {
+    animation: none;
+    text-shadow: none;
+    will-change: auto;
+  }
+
   .bs-modal-head,
   .bs-gallery-slider-head {
     width: 100%;
@@ -829,63 +874,6 @@ section[aria-labelledby="problem-title"] .bs-problem-layout > .bs-card {
 }
 
 
-.bs-suite-rows {
-  display: grid;
-  gap: 3rem;
-  width: 100%;
-  max-width: min(100%, 72rem);
-  margin-inline: auto;
-}
-
-.bs-suite-row {
-  display: grid;
-  gap: 1.6rem;
-  align-items: stretch;
-}
-
-.bs-suite-media,
-.bs-suite-copy-card {
-  width: 100%;
-  min-width: 0;
-}
-
-.bs-suite-media {
-  display: grid;
-  align-content: stretch;
-}
-
-.bs-suite-media .bs-preview-shell,
-.bs-suite-media .bs-preview-frame {
-  height: 100%;
-}
-
-.bs-suite-copy-card {
-  display: grid;
-  align-content: center;
-  padding: 1.5rem 1.6rem;
-}
-
-.bs-suite-copy-card .bs-problem-item {
-  text-align: left;
-}
-
-@media (min-width: 960px) {
-  .bs-suite-row {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-  }
-
-  .bs-suite-row.is-image-last {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
-  }
-
-  .bs-suite-row.is-image-last .bs-suite-media {
-    order: 2;
-  }
-
-  .bs-suite-row.is-image-last .bs-suite-copy-card {
-    order: 1;
-  }
-}
 
 
 .bs-workflow-flow {
@@ -980,14 +968,6 @@ section[aria-labelledby="problem-title"] .bs-problem-layout > .bs-card {
   color: var(--accent-fill);
 }
 
-.bs-workflow-step:hover,
-.bs-workflow-step:focus-within {
-  transform: translateY(-4px);
-  border-color: color-mix(in srgb, var(--accent-fill) 34%, var(--border) 66%);
-  box-shadow:
-    0 18px 34px -28px rgba(0, 0, 0, 0.82),
-    0 8px 20px -18px rgba(0, 0, 0, 0.58);
-}
 
 .bs-workflow-close {
   margin-top: 1.35rem;
@@ -1590,10 +1570,6 @@ section[id="faq"] .bs-showcase-card-title {
   transition: color 180ms ease;
 }
 
-section[id="faq"] .bs-elevated-card:hover .bs-showcase-card-title,
-section[id="faq"] .bs-elevated-card:focus-within .bs-showcase-card-title {
-  color: var(--accent-fill);
-}
 
 .bs-crew-layout {
   display: grid;
@@ -2008,3 +1984,320 @@ section[id="faq"] .bs-elevated-card:focus-within .bs-showcase-card-title {
     font-size: clamp(2.4rem, 14vw, 3.6rem);
   }
 }
+
+.bs-section-head-compact {
+  gap: 0.75rem;
+}
+
+.bs-intelligence-strip {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 74rem);
+  margin: 2rem auto 0;
+}
+
+.bs-intelligence-card {
+  display: grid;
+  gap: 0.9rem;
+  align-content: start;
+  text-align: center;
+  border-top: 1px solid color-mix(in srgb, var(--accent-fill) 34%, var(--border) 66%);
+}
+
+.bs-intelligence-card .bs-feature-title,
+.bs-intelligence-card .bs-feature-copy {
+  text-align: center;
+  margin: 0;
+}
+
+.bs-intelligence-points {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 0.2rem;
+}
+
+.bs-intelligence-point {
+  padding-top: 0.65rem;
+  border-top: 1px solid color-mix(in srgb, var(--border) 84%, transparent);
+  color: var(--muted);
+  text-align: center;
+}
+
+
+
+
+
+
+
+.bs-workflow-grid {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 74rem);
+  margin-inline: auto;
+}
+
+.bs-workflow-card {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.bs-workflow-card .bs-preview-shell,
+.bs-workflow-card .bs-preview-frame {
+  width: 100%;
+}
+
+.bs-workflow-card .bs-problem-item {
+  text-align: left;
+}
+
+@media (min-width: 720px) {
+  .bs-workflow-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+
+@media (min-width: 960px) {
+  #chords .bs-intelligence-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+}
+
+
+.bs-feature-pillars-grid {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 72rem);
+  margin: 2rem auto 0;
+}
+
+.bs-feature-pillar-card {
+  display: grid;
+  gap: 0.75rem;
+  align-content: start;
+}
+
+.bs-feature-pillar-card .bs-feature-title,
+.bs-feature-pillar-card .bs-feature-copy {
+  margin: 0;
+  text-align: left;
+}
+
+@media (min-width: 960px) {
+  .bs-feature-pillars-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+}
+
+
+.bs-reveal {
+  opacity: 0;
+  transform: translate3d(0, 42px, 0);
+  transition:
+    opacity 760ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.bs-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.bs-workflow-grid > :nth-child(2),
+.bs-intelligence-strip > :nth-child(2),
+.bs-feature-pillars-grid > :nth-child(2),
+.bs-workflow-flow > :nth-child(2) {
+  transition-delay: 120ms;
+}
+
+.bs-workflow-grid > :nth-child(3),
+.bs-intelligence-strip > :nth-child(3),
+.bs-feature-pillars-grid > :nth-child(3),
+.bs-workflow-flow > :nth-child(3) {
+  transition-delay: 210ms;
+}
+
+.bs-workflow-grid > :nth-child(4) {
+  transition-delay: 300ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bs-hero-tempo-dot {
+    animation: none;
+    transform: none;
+    text-shadow: none;
+  }
+
+  .bs-problem-list-card::before,
+  .bs-workflow-card::before,
+  .bs-feature-pillar-card::before,
+  .bs-trust-proof-card:not(.bs-trust-proof-card-accent)::before,
+  .bs-migration-step:not(.bs-migration-step-accent)::before,
+  .bs-import-card:not(.bs-import-card-accent)::before,
+  .bs-intelligence-card::before,
+  section[aria-labelledby="appearance-title"] .bs-appearance-feature::before,
+  section[id="faq"] .bs-elevated-card::before {
+    animation: none;
+    opacity: 0;
+  }
+
+  .bs-problem-list-card::after,
+  .bs-workflow-card::after,
+  .bs-feature-pillar-card::after,
+  .bs-trust-proof-card:not(.bs-trust-proof-card-accent)::after,
+  .bs-migration-step:not(.bs-migration-step-accent)::after,
+  .bs-import-card:not(.bs-import-card-accent)::after,
+  .bs-intelligence-card::after,
+  section[aria-labelledby="appearance-title"] .bs-appearance-feature::after,
+  section[id="faq"] .bs-elevated-card::after {
+    opacity: 0.8;
+  }
+
+  .bs-reveal,
+  .bs-workflow-grid > :nth-child(2),
+  .bs-intelligence-strip > :nth-child(2),
+  .bs-feature-pillars-grid > :nth-child(2),
+  .bs-workflow-flow > :nth-child(2),
+  .bs-workflow-grid > :nth-child(3),
+  .bs-intelligence-strip > :nth-child(3),
+  .bs-feature-pillars-grid > :nth-child(3),
+  .bs-workflow-flow > :nth-child(3),
+  .bs-workflow-grid > :nth-child(4) {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+
+@media (max-width: 720px) {
+  .bs-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+
+  .bs-problem-list-card::before,
+  .bs-workflow-card::before,
+  .bs-feature-pillar-card::before,
+  .bs-trust-proof-card:not(.bs-trust-proof-card-accent)::before,
+  .bs-migration-step:not(.bs-migration-step-accent)::before,
+  .bs-import-card:not(.bs-import-card-accent)::before,
+  .bs-intelligence-card::before,
+  section[aria-labelledby="appearance-title"] .bs-appearance-feature::before,
+  section[id="faq"] .bs-elevated-card::before {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+.bs-workflow-card.is-clickable,
+.bs-appearance-preview-card.is-clickable {
+  cursor: zoom-in;
+}
+
+.bs-workflow-card.is-clickable:focus-visible,
+.bs-appearance-preview-card.is-clickable:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px var(--accent-ring),
+    0 18px 42px -30px rgba(0, 0, 0, 0.9),
+    0 10px 28px -22px rgba(0, 0, 0, 0.65);
+}
+
+.bs-problem-list-card,
+.bs-workflow-card,
+.bs-feature-pillar-card,
+.bs-trust-proof-card:not(.bs-trust-proof-card-accent),
+.bs-migration-step:not(.bs-migration-step-accent),
+.bs-import-card:not(.bs-import-card-accent),
+.bs-intelligence-card,
+section[aria-labelledby="appearance-title"] .bs-appearance-feature,
+section[id="faq"] .bs-elevated-card {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.bs-problem-list-card::after,
+.bs-workflow-card::after,
+.bs-feature-pillar-card::after,
+.bs-trust-proof-card:not(.bs-trust-proof-card-accent)::after,
+.bs-migration-step:not(.bs-migration-step-accent)::after,
+.bs-import-card:not(.bs-import-card-accent)::after,
+.bs-intelligence-card::after,
+section[aria-labelledby="appearance-title"] .bs-appearance-feature::after,
+section[id="faq"] .bs-elevated-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid color-mix(in srgb, var(--border) 94%, white 6%);
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.bs-problem-list-card::before,
+.bs-workflow-card::before,
+.bs-feature-pillar-card::before,
+.bs-trust-proof-card:not(.bs-trust-proof-card-accent)::before,
+.bs-migration-step:not(.bs-migration-step-accent)::before,
+.bs-import-card:not(.bs-import-card-accent)::before,
+.bs-intelligence-card::before,
+section[aria-labelledby="appearance-title"] .bs-appearance-feature::before,
+section[id="faq"] .bs-elevated-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  --bs-outline-angle: 0deg;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.7;
+  background: conic-gradient(
+    from var(--bs-outline-angle),
+    transparent 0deg 332deg,
+    color-mix(in srgb, var(--accent-fill) 48%, transparent) 338deg 345deg,
+    color-mix(in srgb, white 28%, var(--accent-fill) 72%) 346deg 349deg,
+    color-mix(in srgb, var(--accent-fill) 42%, transparent) 350deg 356deg,
+    transparent 357deg 360deg
+  );
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  filter: blur(0.2px);
+  animation: bsCardOutlineTrace 7.2s linear infinite;
+}
+
+@property --bs-outline-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes bsCardOutlineTrace {
+  from {
+    --bs-outline-angle: 0deg;
+  }
+
+  to {
+    --bs-outline-angle: 360deg;
+  }
+}
+
+
