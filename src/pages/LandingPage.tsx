@@ -3,12 +3,14 @@ import Modal from '../components/Modal'
 import PreviewFrame from '../components/PreviewFrame'
 import {
   chordIntelligenceCards,
+  crewAccessCards,
   faqs,
   featurePillars,
   galleryScreens,
   importExportCards,
   navLinks,
   problemPoints,
+  pricingTiers,
   suiteCards,
   workflowSteps,
 } from './landingContent'
@@ -67,6 +69,19 @@ function LandingPage() {
   const [email, setEmail] = useState('')
   const [emailError, setEmailError] = useState('')
   const [betaSuccess, setBetaSuccess] = useState(false)
+
+  useEffect(() => {
+    document.title = 'BandSong | Musician Workflow System'
+
+    let metaDescription = document.querySelector<HTMLMetaElement>('meta[name="description"]')
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta')
+      metaDescription.name = 'description'
+      document.head.appendChild(metaDescription)
+    }
+    metaDescription.content =
+      'BandSong is a musician workflow system for editing songs, managing repertoires, planning setlists, and preparing rehearsals and live performances.'
+  }, [])
 
   useEffect(() => {
     const landingElement = landingRef.current
@@ -633,6 +648,112 @@ function LandingPage() {
             <p className="bs-feature-copy bs-import-note">No lock-in. Your songs remain portable.</p>
           </div>
         </section>
+
+        <section className="bs-section bs-section-tight" id="crew-access" aria-labelledby="crew-access-title">
+          <div className="bs-shell">
+            <div className="bs-section-head">
+              <span className="bs-panel-label">Crew Access</span>
+              <h2 className="bs-section-title" id="crew-access-title">Bring your crew into the same workflow.</h2>
+              <p className="bs-section-copy">
+                BandSong helps more than the musicians on stage. Managers, agents, sound engineers, lighting engineers, and production crew can access the information they need without disturbing the band’s core song workflow.
+              </p>
+            </div>
+
+            <div className="bs-crew-layout">
+              <article className="bs-card bs-card-pad bs-crew-story-card">
+                <span className="bs-panel-label bs-panel-label-accent">Early subscriber benefit</span>
+                <p className="bs-crew-lead">
+                  During BandSong’s early subscription period, Crew Access is included for active BandSong subscribers.
+                </p>
+                <div className="bs-crew-copy">
+                  <p className="bs-feature-copy">
+                    Subscribe early and keep included Crew Access for your active BandSong workspace while the related subscription remains active.
+                  </p>
+                  <p className="bs-feature-copy">
+                    Crew members can view the information they are granted access to. Editing core song content depends on the band or workspace owner’s permission settings.
+                  </p>
+                  <p className="bs-feature-copy">
+                    Crew Access availability, limits, and permissions may vary by plan. It is not included for Free users by default.
+                  </p>
+                </div>
+              </article>
+
+              <div className="bs-crew-role-grid" aria-label="Crew Access roles">
+                {crewAccessCards.map((card, index) => (
+                  <article key={card.role} className={`bs-card bs-card-pad bs-crew-role-card${index === 1 ? ' bs-crew-role-card-accent' : ''}`}>
+                    <span className="bs-workflow-step-number">0{index + 1}</span>
+                    <h3 className="bs-feature-title">{card.role}</h3>
+                    <p className="bs-feature-copy">{card.copy}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bs-section bs-section-tight" id="pricing" aria-labelledby="pricing-title">
+          <div className="bs-shell">
+            <div className="bs-section-head">
+              <span className="bs-panel-label">Pricing</span>
+              <h2 className="bs-section-title" id="pricing-title">Digital subscription access for real music teams.</h2>
+              <p className="bs-section-copy">
+                BandSong sells software access for managing songs, setlists, rehearsals, and live performance preparation. It does not sell songs, lyrics, chord charts, copyrighted music databases, or downloadable third-party music content.
+              </p>
+            </div>
+
+            <div className="bs-pricing-grid" aria-label="BandSong subscription plans">
+              {pricingTiers.map((tier) => (
+                <article
+                  key={tier.name}
+                  className={`bs-card bs-card-pad bs-pricing-card${tier.highlighted ? ' bs-pricing-card-featured' : ''}${tier.contact ? ' bs-pricing-card-elite' : ''}`}
+                >
+                  <div className="bs-pricing-card-head">
+                    <div className="bs-pricing-tier-row">
+                      <span className="bs-panel-label bs-panel-label-accent">{tier.name}</span>
+                      {tier.badge ? <span className="bs-pricing-badge">{tier.badge}</span> : null}
+                    </div>
+                    <div className="bs-pricing-price-row">
+                      <span className="bs-pricing-price">{tier.price}</span>
+                      {tier.cadence ? <span className="bs-pricing-cadence">{tier.cadence}</span> : null}
+                    </div>
+                    <p className="bs-feature-copy bs-pricing-best-for">Best for: {tier.bestFor}</p>
+                  </div>
+
+                  <ul className="bs-list-clean bs-pricing-list" aria-label={`${tier.name} includes`}>
+                    {tier.features.map((feature) => (
+                      <li key={feature} className="bs-pricing-item">
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+
+                  {tier.contact ? (
+                    <a
+                      className="bs-button bs-button-secondary bs-focus-ring bs-pricing-cta"
+                      href="mailto:hello@bandsong.app?subject=BandSong%20Elite%20Plan"
+                    >
+                      {tier.cta}
+                    </a>
+                  ) : (
+                    <button type="button" className="bs-button bs-button-primary bs-focus-ring bs-pricing-cta" onClick={openBetaModal}>
+                      {tier.cta}
+                    </button>
+                  )}
+                </article>
+              ))}
+            </div>
+
+            <div className="bs-card bs-card-pad bs-pricing-note-card">
+              <p className="bs-feature-copy">
+                Pricing is subject to change during the beta period. Final billing and subscription management may be handled securely through Lemon Squeezy.
+              </p>
+              <p className="bs-feature-copy">
+                Users are responsible for the content they create, upload, import, or manage inside BandSong.
+              </p>
+            </div>
+          </div>
+        </section>
+
         <section className="bs-section" id="beta">
           <div className="bs-shell">
             <div className="bs-card bs-card-pad bs-beta-card">
@@ -668,15 +789,24 @@ function LandingPage() {
       </main>
 
       <footer className="bs-footer">
-        <div className="bs-shell bs-footer-inner">
+        <div className="bs-shell bs-footer-inner bs-footer-inner-stacked">
+          <div className="bs-footer-brand">
+            <p className="bs-footer-product-line">
+              BandSong is a musician workflow system for managing songs, setlists, rehearsals, and live performance preparation.
+            </p>
+            <p>© {currentYear} BandSong · bandsong.app · hello@bandsong.app</p>
+          </div>
           <nav className="bs-footer-links" aria-label="Footer">
             <a className="bs-link bs-focus-ring" href="#features">Features</a>
             <a className="bs-link bs-focus-ring" href="#how-it-works">Workflow</a>
             <a className="bs-link bs-focus-ring" href="#import-export">Import/Export</a>
-            <a className="bs-link bs-focus-ring" href="mailto:hello@bandsong.app">Contact</a>
+            <a className="bs-link bs-focus-ring" href="#pricing">Pricing</a>
             <a className="bs-link bs-focus-ring" href="#beta">Beta</a>
+            <a className="bs-link bs-focus-ring" href="/terms">Terms of Service</a>
+            <a className="bs-link bs-focus-ring" href="/privacy">Privacy Policy</a>
+            <a className="bs-link bs-focus-ring" href="/refund-policy">Refund Policy</a>
+            <a className="bs-link bs-focus-ring" href="mailto:hello@bandsong.app">Contact</a>
           </nav>
-          <p>(c) {currentYear} BandSong</p>
         </div>
       </footer>
 
@@ -684,7 +814,7 @@ function LandingPage() {
         {betaSuccess ? (
           <div className="bs-showcase-stack">
             <p className="bs-section-copy">Thanks. You are on the beta interest list for this session.</p>
-            <p className="bs-feature-copy">If you prefer email, you can still reach us directly at beta@bandsong.app.</p>
+            <p className="bs-feature-copy">If you prefer email, you can still reach us directly at hello@bandsong.app.</p>
           </div>
         ) : (
           <form className="bs-showcase-stack" onSubmit={handleBetaSubmit} noValidate>
@@ -719,7 +849,7 @@ function LandingPage() {
               </button>
               <a
                 className="bs-button bs-button-secondary bs-focus-ring"
-                href="mailto:beta@bandsong.app?subject=BandSong%20Beta"
+                href="mailto:hello@bandsong.app?subject=BandSong%20Beta"
               >
                 Email Instead
               </a>
@@ -781,11 +911,5 @@ function LandingPage() {
 }
 
 export default LandingPage
-
-
-
-
-
-
 
 

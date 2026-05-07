@@ -1595,6 +1595,261 @@ section[id="faq"] .bs-elevated-card:focus-within .bs-showcase-card-title {
   color: var(--accent-fill);
 }
 
+.bs-crew-layout {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 74rem);
+  margin: 2rem auto 0;
+}
+
+.bs-crew-story-card {
+  display: grid;
+  align-content: start;
+  gap: 1rem;
+  border-color: color-mix(in srgb, var(--accent-fill) 30%, var(--border) 70%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 18%, var(--panel) 82%), var(--panel)),
+    var(--panel);
+}
+
+.bs-crew-story-card .bs-panel-label {
+  justify-self: start;
+}
+
+.bs-crew-lead {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2vw, 1.9rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  text-align: left;
+}
+
+.bs-crew-copy {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.bs-crew-copy .bs-feature-copy {
+  margin: 0;
+  text-align: left;
+}
+
+.bs-crew-role-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.bs-crew-role-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 0.85rem;
+  row-gap: 0.35rem;
+  align-items: start;
+}
+
+.bs-crew-role-card .bs-workflow-step-number {
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+
+.bs-crew-role-card .bs-feature-title,
+.bs-crew-role-card .bs-feature-copy {
+  grid-column: 2;
+  margin: 0;
+  text-align: left;
+}
+
+.bs-crew-role-card-accent {
+  border-color: color-mix(in srgb, var(--accent-fill) 36%, var(--border) 64%);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 18%, var(--panel) 82%), var(--panel)),
+    var(--panel);
+  box-shadow:
+    0 18px 38px -30px rgba(0, 0, 0, 0.88),
+    0 10px 24px -20px rgba(0, 0, 0, 0.58);
+}
+
+.bs-crew-role-card-accent .bs-feature-title {
+  color: var(--accent-fill);
+}
+
+@media (min-width: 960px) {
+  .bs-crew-layout {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 1.4rem;
+    align-items: stretch;
+  }
+}
+
+.bs-pricing-grid {
+  display: grid;
+  gap: 1rem;
+  width: 100%;
+  max-width: min(100%, 78rem);
+  margin: 2rem auto 0;
+}
+
+.bs-pricing-card {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1.25rem;
+  height: 100%;
+  padding: 1.45rem;
+}
+
+.bs-pricing-card-featured {
+  border-color: color-mix(in srgb, var(--accent-fill) 42%, var(--border) 58%);
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--accent-fill) 16%, transparent), transparent 48%),
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-soft) 28%, var(--panel) 72%), var(--panel)),
+    var(--panel);
+  box-shadow:
+    0 24px 52px -30px rgba(0, 0, 0, 0.95),
+    0 12px 32px -22px rgba(0, 196, 90, 0.2);
+}
+
+.bs-pricing-card-head {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.bs-pricing-tier-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.bs-pricing-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.75rem;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--accent-fill) 62%, white 12%);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-fill) 20%, transparent);
+  color: color-mix(in srgb, var(--text) 92%, white 8%);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.bs-pricing-price-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.bs-pricing-price {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.bs-pricing-cadence {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.bs-pricing-best-for {
+  margin: 0;
+  text-align: left;
+}
+
+.bs-pricing-list {
+  display: grid;
+  align-content: start;
+  gap: 0;
+}
+
+.bs-pricing-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.65rem;
+  padding: 0.68rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.bs-pricing-item::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: 0.45rem;
+  border-radius: 999px;
+  background: var(--accent-fill);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-fill) 12%, transparent);
+}
+
+.bs-pricing-item:last-child {
+  border-bottom: 0;
+}
+
+.bs-pricing-cta {
+  width: 100%;
+  margin-top: auto;
+}
+
+.bs-pricing-note-card {
+  display: grid;
+  gap: 0.65rem;
+  width: min(100%, 58rem);
+  margin: 1rem auto 0;
+  border-color: color-mix(in srgb, var(--accent-fill) 26%, var(--border) 74%);
+}
+
+.bs-pricing-note-card .bs-feature-copy {
+  margin: 0;
+  text-align: center;
+}
+
+@media (min-width: 760px) {
+  .bs-pricing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1180px) {
+  .bs-pricing-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .bs-pricing-card-featured:not(.bs-pricing-card-elite) {
+    order: 2;
+    transform: translateY(-0.75rem) scale(1.035);
+    z-index: 1;
+  }
+
+  .bs-pricing-card:not(.bs-pricing-card-featured):not(.bs-pricing-card-elite):nth-child(2) {
+    order: 3;
+  }
+
+  .bs-pricing-card-elite {
+    order: 4;
+    grid-column: 1 / -1;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr) minmax(14rem, 0.4fr);
+    grid-template-rows: auto;
+    align-items: start;
+  }
+
+  .bs-pricing-card-elite .bs-pricing-cta {
+    align-self: end;
+  }
+}
+
 
 .bs-button-primary {
   transition:
@@ -1623,4 +1878,133 @@ section[id="faq"] .bs-elevated-card:focus-within .bs-showcase-card-title {
     0 8px 16px -14px rgba(0, 0, 0, 0.52),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   filter: none;
+}
+
+.bs-footer-inner-stacked {
+  align-items: flex-start;
+}
+
+.bs-footer-brand {
+  display: grid;
+  gap: 0.45rem;
+  max-width: 42rem;
+}
+
+.bs-footer-brand p {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.bs-footer-product-line {
+  color: color-mix(in srgb, var(--text) 72%, var(--muted) 28%);
+}
+
+.bs-legal-page {
+  min-height: 100vh;
+}
+
+.bs-legal-nav {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.bs-legal-nav [aria-current='page'] {
+  color: var(--accent-fill);
+}
+
+.bs-legal-main {
+  min-height: 70vh;
+}
+
+.bs-legal-hero {
+  padding-bottom: clamp(2rem, 5vw, 4rem);
+}
+
+.bs-back-link {
+  display: inline-flex;
+  margin-bottom: 2rem;
+  padding: 0.35rem 0;
+  color: var(--muted);
+}
+
+.bs-back-link:hover {
+  color: var(--accent-fill);
+}
+
+.bs-legal-title {
+  max-width: 13ch;
+  margin-top: 0.35rem;
+}
+
+.bs-legal-lead {
+  max-width: 58rem;
+}
+
+.bs-last-updated {
+  margin-top: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+}
+
+.bs-legal-card {
+  display: grid;
+  gap: 0;
+  width: min(100%, 58rem);
+  margin: 0 auto;
+  padding: clamp(1.2rem, 3vw, 2.2rem);
+}
+
+.bs-legal-section {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1.45rem 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
+}
+
+.bs-legal-section:first-child {
+  padding-top: 0;
+}
+
+.bs-legal-section:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.bs-legal-section-title {
+  color: var(--text);
+  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+  text-align: left;
+}
+
+.bs-legal-copy {
+  max-width: 72ch;
+  text-align: left;
+}
+
+.bs-legal-list {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.bs-legal-list li::marker {
+  color: var(--accent-fill);
+}
+
+@media (max-width: 720px) {
+  .bs-footer-inner-stacked {
+    flex-direction: column;
+  }
+
+  .bs-legal-nav {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .bs-legal-title {
+    font-size: clamp(2.4rem, 14vw, 3.6rem);
+  }
 }

@@ -15,12 +15,49 @@ export type GalleryScreen = {
   label: string
 }
 
+export type PricingTier = {
+  name: string
+  price: string
+  cadence?: string
+  bestFor: string
+  features: string[]
+  cta: string
+  badge?: string
+  highlighted?: boolean
+  contact?: boolean
+}
+
+export type CrewAccessCard = {
+  role: string
+  copy: string
+}
+
 export const navLinks = [
   { href: '#how-it-works', label: 'Workflow' },
   { href: '#features', label: 'Features' },
   { href: '#import-export', label: 'Import/Export' },
   { href: '#migration', label: 'Migration' },
+  { href: '#pricing', label: 'Pricing' },
   { href: '#beta', label: 'Beta' },
+]
+
+export const crewAccessCards: CrewAccessCard[] = [
+  {
+    role: 'Manager / Agent',
+    copy: 'View band details, performance notes, venue information, and planning context.',
+  },
+  {
+    role: 'Sound Engineer',
+    copy: 'Access setlists, song notes, lead vocal notes, arrangement cues, and technical notes.',
+  },
+  {
+    role: 'Lighting Engineer',
+    copy: 'Follow the setlist with feel cues, section changes, and performance flow.',
+  },
+  {
+    role: 'Production Crew',
+    copy: 'Support multiple bands from one BandSong account where access is granted.',
+  },
 ]
 
 export const problemPoints = [
@@ -198,6 +235,72 @@ export const faqs = [
   {
     question: 'Can I customize readability for stage use?',
     answer: 'Yes. Themes, accent colors, chord rendering styles, and viewer readability controls are part of the stage-focused workflow.',
+  },
+]
+
+export const pricingTiers: PricingTier[] = [
+  {
+    name: 'Free',
+    price: '$0',
+    bestFor: 'Trying BandSong and testing the core workflow.',
+    features: [
+      'Limited song/repertoire management',
+      'Basic ChordPro-style editing',
+      'Basic setlist creation',
+      'Local/offline-first usage where available',
+      'Mobile backup access',
+    ],
+    cta: 'Start Free',
+  },
+  {
+    name: 'Performer',
+    price: '$6',
+    cadence: '/month or $60/year',
+    bestFor: 'Solo performers, worship leaders, session musicians, and individual musicians.',
+    features: [
+      'Full personal song library',
+      'ChordPro / OnSong-style editing',
+      'Personal setlists',
+      'Performance viewer',
+      'Import/export tools where available',
+      'Cloud sync/account access',
+    ],
+    cta: 'Choose Performer',
+  },
+  {
+    name: 'Band',
+    price: '$15',
+    cadence: '/month or $150/year',
+    bestFor: 'Bands and small music teams that need one trusted shared repertoire.',
+    features: [
+      'Everything in Performer',
+      '1 band workspace',
+      'Shared repertoire',
+      'Shared setlists',
+      'Band member roles',
+      'Member invitations',
+      'Publish once / keep everyone aligned workflow',
+      'Up to 6 members included',
+    ],
+    cta: 'Choose Band',
+    badge: 'Popular',
+    highlighted: true,
+  },
+  {
+    name: 'Elite',
+    price: 'Contact directly',
+    bestFor:
+      'Studios, larger bands, worship teams, production teams, schools, and organisations needing more flexibility.',
+    features: [
+      'Multiple band/workspace support',
+      'Larger member limits',
+      'Crew access options',
+      'Advanced workflow setup',
+      'Priority onboarding/support',
+      'Custom requirements discussion',
+    ],
+    cta: 'Contact BandSong',
+    contact: true,
   },
 ]
 
