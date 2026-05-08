@@ -35,6 +35,7 @@ revoke all on table public.beta_requests from authenticated;
 
 -- The website API route should insert with SUPABASE_SERVICE_ROLE_KEY, which bypasses RLS.
 -- No public select/update/delete policies are created, so website users cannot read requests.
+grant insert on table public.beta_requests to service_role;
 
 -- Optional fallback for server-side use with SUPABASE_ANON_KEY only.
 -- This allows insert-only access and still does not allow public reads.

@@ -27,6 +27,7 @@ The migration creates:
 - constraints for email, status, and source
 - indexes for `created_at`, `status`, and `email`
 - RLS with no public read/update/delete access
+- `service_role` insert access for the server API route
 - a narrow insert-only anon fallback policy
 
 ## Reviewing Requests
