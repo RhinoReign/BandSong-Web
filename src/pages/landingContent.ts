@@ -32,6 +32,26 @@ export type CrewAccessCard = {
   copy: string
 }
 
+export type AudienceCard = {
+  title: string
+  copy: string
+}
+
+export type AudienceGroup = {
+  label: string
+  title: string
+  copy: string
+  people: string[]
+}
+
+export type RoadmapPhase = {
+  label: string
+  title: string
+  copy: string
+  bullets: string[]
+  future?: boolean
+}
+
 export const navLinks = [
   { href: '#how-it-works', label: 'How It Works' },
   { href: '#workflow', label: 'Workflow' },
@@ -39,6 +59,95 @@ export const navLinks = [
   { href: '#migration', label: 'Migration' },
   { href: '#pricing', label: 'Pricing' },
   { href: '#beta', label: 'Beta' },
+]
+
+export const audienceGroups: AudienceGroup[] = [
+  {
+    label: 'Perform',
+    title: 'Musicians preparing and playing',
+    copy: 'For people who need their own charts, setlists, and stage-ready reading surface.',
+    people: ['Live bands', 'Session musicians', 'Solo performers', 'Band members'],
+  },
+  {
+    label: 'Lead',
+    title: 'People coordinating the music',
+    copy: 'For the roles responsible for keeping arrangements, versions, and rehearsal decisions aligned.',
+    people: ['Band leaders', 'Music directors', 'Worship teams', 'Studios and organisations'],
+  },
+  {
+    label: 'Support',
+    title: 'Crew and planning roles',
+    copy: 'For the people around the band who need context without disrupting the core song workflow.',
+    people: ['Sound engineers', 'Lighting engineers', 'Managers and agents', 'Production crew'],
+  },
+]
+
+export const compatibilityBadges = [
+  'Offline-first',
+  'ChordPro compatible',
+  'OnSong-friendly',
+  'Export anytime',
+  'No lock-in',
+  'Cross-device workflow',
+  'Crew-ready',
+  'Performance-safe viewer',
+]
+
+export const betaRoleOptions = [
+  'Solo performer',
+  'Band leader',
+  'Band member',
+  'Worship/music director',
+  'Sound engineer',
+  'Lighting engineer',
+  'Manager/agent',
+  'Studio/organisation',
+  'Other',
+]
+
+export const roadmapPhases: RoadmapPhase[] = [
+  {
+    label: 'Phase 1',
+    title: 'Rehearsal and performance workflow',
+    copy:
+      "BandSong's current focus is the core workflow: trusted song versions, ChordPro-style editing, repertoire control, setlist planning, publish/sync behaviour, crew access, and a calm live viewer.",
+    bullets: [
+      'Song editing',
+      'Repertoire management',
+      'Setlists',
+      'Live viewer',
+      'Band/crew access',
+      'Import/export',
+      'Beta subscriptions',
+    ],
+  },
+  {
+    label: 'Phase 2',
+    title: 'AI-assisted rehearsal intelligence',
+    copy:
+      "Future AI features may help bands prepare faster by suggesting set compilations, smoother transitions between songs, arrangement improvements, and possible chord-change ideas based on the material inside the user's own library.",
+    bullets: [
+      'Auto setlist/set compilation suggestions',
+      'Transition suggestions between songs',
+      'Suggested chord changes',
+      'Arrangement and rehearsal planning assistance',
+    ],
+    future: true,
+  },
+  {
+    label: 'Phase 3',
+    title: 'Song-linked FX and performance hardware',
+    copy:
+      'Longer term, BandSong may connect song and setlist context to performance hardware, allowing vocal, guitar, and multi-FX settings to be associated with specific songs or sections on supported devices in future.',
+    bullets: [
+      'Vocal FX context',
+      'Guitar FX context',
+      'Boss/Roland-style hardware workflows',
+      'Song-specific patches or cues',
+      'Section-based FX assignments',
+    ],
+    future: true,
+  },
 ]
 
 export const crewAccessCards: CrewAccessCard[] = [
@@ -171,7 +280,7 @@ export const chordIntelligenceCards: PreviewCard[] = [
 export const featurePillars = [
   {
     title: 'Version certainty',
-    body: 'One trusted version of every song - so rehearsal and stage runs stay consistent.',
+    body: 'Controlled song versions so rehearsal and stage runs stay consistent.',
   },
   {
     title: 'Rehearsal-to-stage workflow',
@@ -220,7 +329,7 @@ export const faqs = [
   },
   {
     question: 'Does it work offline?',
-    answer: 'Yes. BandSong is offline-first so your songs remain available when internet disappears.',
+    answer: 'Yes. BandSong is designed to keep songs available when connection quality drops.',
   },
   {
     question: 'Does it support iOS and Android?',
@@ -245,7 +354,7 @@ export const pricingTiers: PricingTier[] = [
       'Limited song/repertoire management',
       'Basic ChordPro-style editing',
       'Basic setlist creation',
-      'Local/offline-first usage where available',
+      'Local access where available',
       'Mobile backup access',
     ],
     cta: 'Start Free',
