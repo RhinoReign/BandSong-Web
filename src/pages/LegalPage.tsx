@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+﻿import { useEffect } from 'react'
 
 type LegalSection = {
   title: string
@@ -300,7 +300,7 @@ function LegalPage({ page }: LegalPageProps) {
             <p className="bs-footer-product-line">
               BandSong is a musician workflow system for managing songs, setlists, rehearsals, and live performance preparation.
             </p>
-            <p>© BandSong · bandsong.app · {contactEmail}</p>
+            <p>&copy; BandSong &middot; bandsong.app &middot; {contactEmail}</p>
           </div>
           <nav className="bs-footer-links" aria-label="Footer">
             <a className="bs-link bs-focus-ring" href="/terms">Terms of Service</a>

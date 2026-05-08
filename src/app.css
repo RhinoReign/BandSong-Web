@@ -1864,13 +1864,13 @@ section[id="faq"] .bs-showcase-card-title {
 
 .bs-footer-groups {
   display: grid;
-  gap: 1.2rem;
-  width: min(100%, 42rem);
+  gap: 0.9rem;
+  width: min(100%, 44rem);
 }
 
 .bs-footer-group {
   display: grid;
-  gap: 0.55rem;
+  gap: 0.4rem;
   align-content: start;
 }
 
@@ -2207,10 +2207,47 @@ section[id="faq"] .bs-showcase-card-title {
   align-items: flex-start;
 }
 
+.bs-footer {
+  position: relative;
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+  padding: clamp(2.5rem, 5vw, 4rem) 0 clamp(2rem, 4vw, 3rem);
+  background:
+    linear-gradient(180deg, transparent, color-mix(in srgb, var(--panel) 44%, transparent) 28%, color-mix(in srgb, var(--bg) 92%, var(--panel) 8%) 100%);
+}
+
+.bs-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--accent-fill) 42%, var(--border) 58%),
+    color-mix(in srgb, var(--text) 14%, var(--border) 86%),
+    transparent
+  );
+}
+
+.bs-footer-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(1.6rem, 5vw, 4rem);
+  padding: clamp(1.2rem, 2.4vw, 1.55rem);
+  border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
+  border-radius: 8px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--panel) 82%, transparent), color-mix(in srgb, var(--panel-2) 58%, transparent)),
+    color-mix(in srgb, var(--bg) 84%, var(--panel) 16%);
+  box-shadow:
+    0 24px 56px -36px rgba(0, 0, 0, 0.78),
+    inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+}
+
 .bs-footer-brand {
   display: grid;
-  gap: 0.45rem;
-  max-width: 42rem;
+  gap: 0.7rem;
+  max-width: 32rem;
 }
 
 .bs-footer-brand p {
@@ -2219,7 +2256,64 @@ section[id="faq"] .bs-showcase-card-title {
 }
 
 .bs-footer-product-line {
-  color: color-mix(in srgb, var(--text) 72%, var(--muted) 28%);
+  color: color-mix(in srgb, var(--text) 78%, var(--muted) 22%);
+  font-size: clamp(1rem, 1.5vw, 1.08rem);
+}
+
+.bs-footer-logo {
+  display: inline-flex;
+  width: min(11.5rem, 56vw);
+  margin-bottom: 0.15rem;
+  border-radius: 6px;
+}
+
+.bs-footer-logo img {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.32));
+}
+
+.bs-footer-group {
+  min-width: 0;
+}
+
+.bs-footer-group .bs-panel-label {
+  margin-bottom: 0.15rem;
+  color: color-mix(in srgb, var(--muted) 78%, var(--text) 22%);
+}
+
+.bs-footer-group .bs-link,
+.bs-footer-links .bs-link {
+  width: fit-content;
+  padding: 0.18rem 0;
+  color: color-mix(in srgb, var(--text) 84%, var(--muted) 16%);
+  line-height: 1.45;
+  transition:
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.bs-footer-group .bs-link:hover,
+.bs-footer-links .bs-link:hover {
+  color: var(--accent-fill);
+  transform: translateX(2px);
+}
+
+.bs-footer-placeholder {
+  margin-top: 0.1rem;
+  font-size: 0.92rem;
+}
+
+@media (min-width: 900px) {
+  .bs-footer-inner {
+    grid-template-columns: minmax(18rem, 0.9fr) minmax(30rem, 1.1fr);
+    align-items: start;
+  }
+
+  .bs-footer-groups,
+  .bs-footer-links {
+    justify-self: end;
+  }
 }
 
 .bs-legal-page {

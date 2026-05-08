@@ -1218,6 +1218,9 @@ function LandingPage() {
       <footer className="bs-footer">
         <div className="bs-shell bs-footer-inner bs-footer-inner-stacked">
           <div className="bs-footer-brand">
+            <a className="bs-footer-logo bs-focus-ring" href="/" aria-label="BandSong home">
+              <img src="/BandSong Logo - Type.svg" alt="BandSong" />
+            </a>
             <p className="bs-footer-product-line">
               BandSong is a musician workflow system for managing songs, setlists, rehearsals, and live performance preparation.
             </p>
