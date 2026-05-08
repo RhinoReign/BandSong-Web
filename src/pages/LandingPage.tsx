@@ -2,7 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import Modal from '../components/Modal'
 import PreviewFrame from '../components/PreviewFrame'
 import {
+  audienceGroups,
+  betaRoleOptions,
   chordIntelligenceCards,
+  compatibilityBadges,
   crewAccessCards,
   featurePillars,
   faqs,
@@ -11,6 +14,7 @@ import {
   navLinks,
   problemPoints,
   pricingTiers,
+  roadmapPhases,
   suiteCards,
   workflowSteps,
 } from './landingContent'
@@ -27,6 +31,22 @@ type ViewerImage = {
   label: string
 }
 
+type BetaRequestPayload = {
+  name: string
+  email: string
+  organisation: string
+  role: string
+  message: string
+  website: string
+}
+
+type BetaAccessFormProps = {
+  idPrefix: string
+  onSuccess?: () => void
+}
+
+type BetaFormState = 'idle' | 'submitting' | 'success' | 'error'
+
 function MobileMenu({ open, onNavigate, onJoinBeta }: MobileMenuProps) {
   return (
     <div className={`bs-mobile-panel${open ? ' is-open' : ''}`} aria-hidden={open ? 'false' : 'true'}>
@@ -41,12 +61,13 @@ function MobileMenu({ open, onNavigate, onJoinBeta }: MobileMenuProps) {
         <button
           type="button"
           className="bs-button bs-button-primary bs-focus-ring"
+          data-track="request-beta-access"
           onClick={() => {
             onNavigate()
             onJoinBeta()
           }}
         >
-          Join the Beta
+          Request Beta Access
         </button>
       </div>
     </div>
@@ -68,7 +89,161 @@ function handleCardKeyDown(event: React.KeyboardEvent<HTMLElement>, onOpen?: () 
   }
 }
 
-const betaInbox = 'hello@bandsong.app'
+const betaSuccessMessage =
+  "Your beta request has been received. BandSong is currently onboarding early users in phases, and we'll reach out as the workflow expands."
+const betaFailureMessage = 'Something went wrong while sending your request. Please try again or contact hello@bandsong.app.'
+
+function validateBetaRequest(payload: BetaRequestPayload) {
+  if (!payload.name) {
+    return 'Enter your name.'
+  }
+
+  if (!isValidEmail(payload.email)) {
+    return 'Enter a valid email address.'
+  }
+
+  if (!payload.role) {
+    return 'Choose your role.'
+  }
+
+  return ''
+}
+
+function BetaAccessForm({ idPrefix, onSuccess }: BetaAccessFormProps) {
+  const [formState, setFormState] = useState<BetaFormState>('idle')
+  const [formError, setFormError] = useState('')
+
+  useEffect(() => {
+    // TODO: Track beta form viewed when analytics event routing is finalised.
+  }, [])
+
+  const isSubmitting = formState === 'submitting'
+  const showSuccess = formState === 'success'
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const formData = new FormData(form)
+    const payload: BetaRequestPayload = {
+      name: String(formData.get('name') ?? '').trim(),
+      email: String(formData.get('email') ?? '').trim(),
+      organisation: String(formData.get('organisation') ?? '').trim(),
+      role: String(formData.get('role') ?? '').trim(),
+      message: String(formData.get('message') ?? '').trim(),
+      website: String(formData.get('website') ?? '').trim(),
+    }
+    const validationError = validateBetaRequest(payload)
+
+    if (validationError) {
+      setFormState('error')
+      setFormError(validationError)
+      return
+    }
+
+    setFormState('submitting')
+    setFormError('')
+    // TODO: Track beta form submitted when analytics event routing is finalised.
+
+    try {
+      const response = await fetch('/api/beta-request', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Beta request failed with status ${response.status}`)
+      }
+
+      form.reset()
+      setFormState('success')
+      onSuccess?.()
+      // TODO: Track beta submission success when analytics event routing is finalised.
+    } catch {
+      setFormState('error')
+      setFormError(betaFailureMessage)
+      // TODO: Track beta submission failure when analytics event routing is finalised.
+    }
+  }
+
+  return (
+    <form className="bs-card bs-card-pad bs-beta-access-form" data-track="beta-form" onSubmit={handleSubmit} noValidate>
+      <div className="bs-form-grid">
+        <div className="bs-form-field">
+          <label className="bs-feature-title" htmlFor={`${idPrefix}-name`}>
+            Name
+          </label>
+          <input
+            id={`${idPrefix}-name`}
+            name="name"
+            className="bs-input bs-focus-ring"
+            type="text"
+            autoComplete="name"
+            disabled={isSubmitting}
+            required
+          />
+        </div>
+        <div className="bs-form-field">
+          <label className="bs-feature-title" htmlFor={`${idPrefix}-email`}>
+            Email
+          </label>
+          <input
+            id={`${idPrefix}-email`}
+            name="email"
+            className="bs-input bs-focus-ring"
+            type="email"
+            autoComplete="email"
+            disabled={isSubmitting}
+            required
+          />
+        </div>
+        <div className="bs-form-field">
+          <label className="bs-feature-title" htmlFor={`${idPrefix}-organisation`}>
+            Band / Organisation name
+          </label>
+          <input id={`${idPrefix}-organisation`} name="organisation" className="bs-input bs-focus-ring" type="text" disabled={isSubmitting} />
+        </div>
+        <div className="bs-form-field">
+          <label className="bs-feature-title" htmlFor={`${idPrefix}-role`}>
+            Role
+          </label>
+          <select id={`${idPrefix}-role`} name="role" className="bs-input bs-focus-ring" defaultValue={betaRoleOptions[0]} disabled={isSubmitting} required>
+            {betaRoleOptions.map((role) => (
+              <option key={role} value={role}>
+                {role}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div className="bs-form-field">
+        <label className="bs-feature-title" htmlFor={`${idPrefix}-message`}>
+          Optional message
+        </label>
+        <textarea id={`${idPrefix}-message`} name="message" className="bs-input bs-textarea bs-focus-ring" rows={4} disabled={isSubmitting} />
+      </div>
+      <div className="bs-honeypot-field" aria-hidden="true">
+        <label htmlFor={`${idPrefix}-website`}>Website</label>
+        <input id={`${idPrefix}-website`} name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
+      {formError ? <p className="bs-form-error">{formError}</p> : null}
+      {showSuccess ? (
+        <div className="bs-form-success" role="status">
+          <p>{betaSuccessMessage}</p>
+          <p>You can also contact hello@bandsong.app directly if needed.</p>
+        </div>
+      ) : null}
+      <div className="bs-action-row">
+        <button type="submit" className="bs-button bs-button-primary bs-focus-ring" data-track="request-beta-access" disabled={isSubmitting}>
+          {isSubmitting ? 'Sending Request...' : 'Request Beta Access'}
+        </button>
+      </div>
+      {!showSuccess ? <p className="bs-feature-copy bs-form-contact-note">You can also contact hello@bandsong.app directly if needed.</p> : null}
+    </form>
+  )
+}
 
 function LandingPage() {
   const landingRef = useRef<HTMLDivElement | null>(null)
@@ -79,9 +254,6 @@ function LandingPage() {
   const [galleryIndex, setGalleryIndex] = useState(0)
   const [galleryDirection, setGalleryDirection] = useState<1 | -1>(1)
   const [viewerImage, setViewerImage] = useState<ViewerImage | null>(null)
-  const [email, setEmail] = useState('')
-  const [emailError, setEmailError] = useState('')
-  const [betaSuccess, setBetaSuccess] = useState(false)
 
   useEffect(() => {
     document.title = 'BandSong | Musician Workflow System'
@@ -263,8 +435,6 @@ function LandingPage() {
   const activeGalleryScreen = galleryScreens[galleryIndex]
 
   const openBetaModal = () => {
-    setEmailError('')
-    setBetaSuccess(false)
     setBetaOpen(true)
   }
 
@@ -282,23 +452,6 @@ function LandingPage() {
     setShowHeroProductPreview(false)
     setViewerImage({ src, alt, label })
   }
-  const handleBetaSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    if (!isValidEmail(email)) {
-      setEmailError('Enter a valid email address.')
-      setBetaSuccess(false)
-      return
-    }
-
-    const subject = encodeURIComponent('BandSong Beta')
-    const body = encodeURIComponent(`Beta signup email: ${email}`)
-
-    setEmailError('')
-    setBetaSuccess(true)
-    window.location.href = `mailto:${betaInbox}?subject=${subject}&body=${body}`
-  }
-
   return (
     <div className="bs-landing" ref={landingRef}>
       <a className="bs-skip-link" href="#main-content">
@@ -317,8 +470,8 @@ function LandingPage() {
                 {link.label}
               </a>
             ))}
-            <button type="button" className="bs-button bs-button-primary bs-focus-ring bs-nav-cta" onClick={openBetaModal}>
-              Join the Beta
+            <button type="button" className="bs-button bs-button-primary bs-focus-ring bs-nav-cta" data-track="request-beta-access" onClick={openBetaModal}>
+              Request Beta Access
             </button>
           </nav>
 
@@ -353,16 +506,16 @@ function LandingPage() {
               </p>
               <p className="bs-feature-copy bs-hero-note">Songs come first. Calm tools beat feature overload.</p>
               <div className="bs-action-row bs-hero-actions">
-                <button type="button" className="bs-button bs-button-primary bs-focus-ring" onClick={openBetaModal}>
-                  Join the Beta
-                </button>
+                <a className="bs-button bs-button-primary bs-focus-ring" href="#beta" data-track="request-beta-access">
+                  Request Beta Access
+                </a>
                 <div
                   className="bs-hero-product-anchor"
                   onMouseEnter={() => setShowHeroProductPreview(true)}
                   onMouseLeave={() => setShowHeroProductPreview(false)}
                 >
-                  <button type="button" className="bs-button bs-button-secondary bs-focus-ring" onClick={() => openGallery(0)}>
-                    Watch Demo
+                  <button type="button" className="bs-button bs-button-secondary bs-focus-ring" data-track="see-product" onClick={() => openGallery(0)}>
+                    See Product
                   </button>
                   <div className={`bs-hero-product-tooltip${showHeroProductPreview ? ' is-visible' : ''}`} aria-hidden={showHeroProductPreview ? 'false' : 'true'}>
                     {showHeroProductPreview ? (
@@ -381,7 +534,26 @@ function LandingPage() {
                     ) : null}
                   </div>
                 </div>
+                <a className="bs-button bs-button-secondary bs-focus-ring" href="#pricing" data-track="view-pricing">
+                  View Pricing
+                </a>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal aria-labelledby="compatibility-title">
+          <div className="bs-shell">
+            <div className="bs-section-head bs-section-head-compact">
+              <span className="bs-panel-label">Compatibility</span>
+              <h2 className="bs-section-title" id="compatibility-title">Built around the way real teams already work.</h2>
+            </div>
+            <div className="bs-trust-badge-grid" aria-label="BandSong compatibility and trust points">
+              {compatibilityBadges.map((badge) => (
+                <span key={badge} className="bs-code-chip">
+                  {badge}
+                </span>
+              ))}
             </div>
           </div>
         </section>
@@ -415,12 +587,38 @@ function LandingPage() {
           </div>
         </section>
 
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="who-for" aria-labelledby="who-for-title">
+          <div className="bs-shell">
+            <div className="bs-section-head">
+              <span className="bs-panel-label">Who it is for</span>
+              <h2 className="bs-section-title" id="who-for-title">Built for the people who keep music organized.</h2>
+              <p className="bs-section-copy">
+                BandSong supports the musicians, directors, leaders, engineers, and organisers who need one clear place for rehearsal and performance context.
+              </p>
+            </div>
+            <div className="bs-audience-group-grid">
+              {audienceGroups.map((group) => (
+                <article key={group.title} className="bs-card bs-card-pad bs-audience-group-card bs-reveal" data-reveal>
+                  <span className="bs-panel-label bs-panel-label-accent">{group.label}</span>
+                  <h3 className="bs-feature-title">{group.title}</h3>
+                  <p className="bs-feature-copy">{group.copy}</p>
+                  <ul className="bs-list-clean bs-audience-person-list" aria-label={`${group.title} examples`}>
+                    {group.people.map((person) => (
+                      <li key={person}>{person}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <section className="bs-section bs-reveal" data-reveal id="how-it-works"> 
           <div className="bs-shell">
             <div className="bs-section-head">
               <span className="bs-panel-label">Workflow</span>
               <h2 className="bs-section-title">Publish once. Everyone stays aligned.</h2>
-              <p className="bs-section-copy">BandSong keeps one trusted version of every song. When you update a chart or arrangement, your group stays synchronized across devices - with the confidence to rehearse and perform without version guessing.</p>
+              <p className="bs-section-copy">BandSong keeps song changes controlled. When you update a chart or arrangement, your group stays synchronized across devices - with less version guessing before rehearsal.</p>
             </div>
             <div className="bs-workflow-flow" aria-label="BandSong workflow">
               {workflowSteps.map((step, index) => (
@@ -483,6 +681,28 @@ function LandingPage() {
                   </article>
                 )
               })}
+            </div>
+          </div>
+        </section>
+
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="demo" aria-labelledby="demo-title">
+          <div className="bs-shell">
+            <div className="bs-demo-layout">
+              <div className="bs-section-head bs-demo-copy">
+                <span className="bs-panel-label">Demo</span>
+                <h2 className="bs-section-title" id="demo-title">See BandSong in action.</h2>
+                <p className="bs-section-copy">
+                  A short product walkthrough is coming soon, showing the full workflow from song editing to setlist planning and live viewer mode.
+                </p>
+              </div>
+              <div className="bs-card bs-card-pad bs-demo-placeholder" aria-label="Demo video placeholder">
+                <span className="bs-panel-label bs-panel-label-accent">Walkthrough</span>
+                <p className="bs-demo-placeholder-title">Demo video coming soon.</p>
+                <p className="bs-feature-copy">The placeholder is here so reviewers can see where the product walkthrough will live.</p>
+                <button type="button" className="bs-button bs-button-secondary bs-focus-ring" disabled>
+                  Watch Demo
+                </button>
+              </div>
             </div>
           </div>
         </section>
@@ -590,6 +810,29 @@ function LandingPage() {
           </div>
         </section>
 
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="desktop-tablet" aria-labelledby="desktop-tablet-title">
+          <div className="bs-shell">
+            <div className="bs-card bs-card-pad bs-split-feature-card">
+              <div className="bs-split-feature-copy">
+                <span className="bs-panel-label bs-panel-label-accent">Desktop & Tablet First</span>
+                <h2 className="bs-section-title" id="desktop-tablet-title">Built for desktop and tablet workflows.</h2>
+                <p className="bs-feature-copy">
+                  BandSong is designed for the spaces where musicians actually prepare: laptops, desktops, and tablets. Editing charts, organizing setlists, reviewing arrangements, and running rehearsals all benefit from a larger working surface.
+                </p>
+                <p className="bs-feature-copy">
+                  Mobile access is supported as a lightweight backup and emergency layer, but the full BandSong experience is best on desktop, laptop, or tablet.
+                </p>
+              </div>
+              <div className="bs-surface-stack" aria-label="Primary BandSong surfaces">
+                <span className="bs-code-chip">Desktop editing</span>
+                <span className="bs-code-chip">Laptop rehearsal prep</span>
+                <span className="bs-code-chip">Tablet stage viewing</span>
+                <span className="bs-code-chip">Mobile backup access</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="bs-section bs-section-tight bs-reveal" data-reveal aria-labelledby="trust-title">
           <div className="bs-shell">
             <div className="bs-section-head">
@@ -608,7 +851,7 @@ function LandingPage() {
                 <p className="bs-trust-lead">Offline-first: your songs stay available when internet disappears.</p>
                 <div className="bs-trust-copy">
                   <p className="bs-feature-copy">BandSong is not designed for ideal studio conditions. It is designed for the actual band room: a leader making last-minute edits, players arriving on different devices, and everyone needing confidence before the downbeat.</p>
-                  <p className="bs-feature-copy">That is why the product stays content-first, avoids noisy UI, and keeps the trusted version of the song in front of the band.</p>
+                  <p className="bs-feature-copy">That is why the product stays content-first, avoids noisy UI, and keeps the current chart in front of the band.</p>
                 </div>
               </article>
               <div className="bs-trust-proof-grid" aria-label="Trust points">
@@ -628,6 +871,30 @@ function LandingPage() {
                   <p className="bs-feature-copy">Real rehearsal constraints shaped the product from the start, not just feature ideas on a roadmap.</p>
                 </article>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="origin" aria-labelledby="origin-title">
+          <div className="bs-shell">
+            <div className="bs-origin-grid">
+              <article className="bs-card bs-card-pad bs-origin-card">
+                <span className="bs-panel-label bs-panel-label-accent">Origin</span>
+                <h2 className="bs-section-title" id="origin-title">Built from real rehearsal pressure.</h2>
+                <p className="bs-feature-copy">
+                  BandSong was built directly from real-world experience managing active band rehearsals, arrangements, setlists, last-minute edits, and live-performance preparation.
+                </p>
+                <p className="bs-feature-copy">
+                  The product exists because last-minute changes are predictable - and manageable. It is shaped by real band-room constraints, by someone who understands rehearsal workflow, and by a preference for clarity over feature overload.
+                </p>
+              </article>
+              <article className="bs-card bs-card-pad bs-calm-card">
+                <span className="bs-panel-label">Positioning</span>
+                <h2 className="bs-section-title">Calm beats feature overload.</h2>
+                <p className="bs-feature-copy">
+                  BandSong is intentionally designed to reduce rehearsal noise. The goal is not to add another busy app to the room - it is to keep the song, setlist, and performance context clear when people need it most.
+                </p>
+              </article>
             </div>
           </div>
         </section>
@@ -667,7 +934,7 @@ function LandingPage() {
                 <p className="bs-migration-lead">Move your existing library over fast, keep control of the review, and publish only when the songs are ready.</p>
                 <div className="bs-migration-copy">
                   <p className="bs-feature-copy">BandSong is built for teams that already have real charts, real setlists, and existing workflows. The migration path is meant to feel practical, not risky.</p>
-                  <p className="bs-feature-copy">Bring over your material, verify the structure, and land on one trusted version the whole group can use.</p>
+                  <p className="bs-feature-copy">Bring over your material, verify the structure, and publish the version the whole group can use.</p>
                 </div>
               </article>
               <div className="bs-workflow-flow bs-migration-flow" aria-label="Migration flow">
@@ -735,6 +1002,12 @@ function LandingPage() {
               </div>
             </div>
             <p className="bs-feature-copy bs-import-note">No lock-in. Your songs remain portable.</p>
+            <div className="bs-card bs-card-pad bs-content-rights-note">
+              <span className="bs-panel-label bs-panel-label-accent">Content responsibility</span>
+              <p className="bs-feature-copy">
+                BandSong does not provide copyrighted song libraries, lyrics databases, or unauthorized third-party downloads. You import, create, and manage your own material, and you remain responsible for the rights to the content you use.
+              </p>
+            </div>
           </div>
         </section>
 
@@ -744,7 +1017,7 @@ function LandingPage() {
               <span className="bs-panel-label">Crew Access</span>
               <h2 className="bs-section-title" id="crew-access-title">Bring your crew into the same workflow.</h2>
               <p className="bs-section-copy">
-                BandSong helps more than the musicians on stage. Managers, agents, sound engineers, lighting engineers, and production crew can access the information they need without disturbing the band’s core song workflow.
+                BandSong helps more than the musicians on stage. Managers, agents, sound engineers, lighting engineers, and production crew can access the information they need without disturbing the band's core song workflow.
               </p>
             </div>
 
@@ -752,14 +1025,14 @@ function LandingPage() {
               <article className="bs-card bs-card-pad bs-crew-story-card bs-reveal" data-reveal>
                 <span className="bs-panel-label bs-panel-label-accent">Early subscriber benefit</span>
                 <p className="bs-crew-lead">
-                  During BandSong’s early subscription period, Crew Access is included for active BandSong subscribers.
+                  During BandSong's early subscription period, Crew Access is included for active BandSong subscribers.
                 </p>
                 <div className="bs-crew-copy">
                   <p className="bs-feature-copy">
                     Subscribe early and keep included Crew Access for your active BandSong workspace while the related subscription remains active.
                   </p>
                   <p className="bs-feature-copy">
-                    Crew members can view the information they are granted access to. Editing core song content depends on the band or workspace owner’s permission settings.
+                    Crew members can view the information they are granted access to. Editing core song content depends on the band or workspace owner's permission settings.
                   </p>
                   <p className="bs-feature-copy">
                     Crew Access availability, limits, and permissions may vary by plan. It is not included for Free users by default.
@@ -821,11 +1094,13 @@ function LandingPage() {
                     <a
                       className="bs-button bs-button-secondary bs-focus-ring bs-pricing-cta"
                       href="mailto:hello@bandsong.app?subject=BandSong%20Elite%20Plan"
+                      data-track="contact-bandsong"
+                      data-plan={tier.name}
                     >
                       {tier.cta}
                     </a>
                   ) : (
-                    <button type="button" className="bs-button bs-button-primary bs-focus-ring bs-pricing-cta" onClick={openBetaModal}>
+                    <button type="button" className="bs-button bs-button-primary bs-focus-ring bs-pricing-cta" data-track="plan-cta" data-plan={tier.name} onClick={openBetaModal}>
                       {tier.cta}
                     </button>
                   )}
@@ -841,21 +1116,83 @@ function LandingPage() {
                 Users are responsible for the content they create, upload, import, or manage inside BandSong.
               </p>
             </div>
+
+            <div className="bs-card bs-card-pad bs-beta-status-card">
+              <span className="bs-panel-label bs-panel-label-accent">Early access status</span>
+              <p className="bs-feature-copy">
+                BandSong is in active beta. Access may be limited while the workflow, plans, and platform support are refined.
+              </p>
+            </div>
           </div>
         </section>
 
-        <section className="bs-section bs-reveal" data-reveal id="beta">
+        <section className="bs-section" id="beta">
           <div className="bs-shell">
-            <div className="bs-card bs-card-pad bs-beta-card bs-reveal" data-reveal>
-              <span className="bs-panel-label bs-panel-label-accent">Beta</span>
-              <h2 className="bs-section-title">Join the BandSong beta.</h2>
-              <p className="bs-section-copy">Get early access, help shape the workflow, and bring your group into a cleaner way of sharing music.</p>
-              <div className="bs-action-row">
-                <button type="button" className="bs-button bs-button-primary bs-focus-ring" onClick={openBetaModal}>
-                  Join the Beta
-                </button>
+            <div className="bs-beta-access-layout">
+              <div className="bs-card bs-card-pad bs-beta-card bs-beta-access-copy">
+                <span className="bs-panel-label bs-panel-label-accent">Beta</span>
+                <h2 className="bs-section-title">Request BandSong beta access.</h2>
+                <p className="bs-section-copy">
+                  Tell us how you plan to use BandSong and we'll prioritize beta access for teams that match the current workflow focus.
+                </p>
+                <p className="bs-feature-copy bs-beta-note">Early access, thoughtful updates, and a clear way to shape the product.</p>
               </div>
-              <p className="bs-feature-copy bs-beta-note">Early access, thoughtful updates, and a clear way to shape the product.</p>
+
+              <BetaAccessForm idPrefix="beta-access" />
+            </div>
+          </div>
+        </section>
+
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="docs-roadmap" aria-labelledby="docs-title">
+          <div className="bs-shell">
+            <div className="bs-docs-roadmap-grid">
+              <article className="bs-card bs-card-pad bs-docs-card">
+                <span className="bs-panel-label bs-panel-label-accent">Docs</span>
+                <h2 className="bs-section-title" id="docs-title">Documentation coming soon.</h2>
+                <p className="bs-feature-copy">
+                  Quick-start guides, ChordPro syntax help, import guidance, viewer shortcuts, and migration support will be added as BandSong moves through beta.
+                </p>
+              </article>
+              <article className="bs-card bs-card-pad bs-docs-card">
+                <span className="bs-panel-label">Support</span>
+                <h2 className="bs-section-title">Practical help, not noise.</h2>
+                <p className="bs-feature-copy">
+                  The documentation will focus on getting real songs, setlists, and performance workflows ready without turning setup into another rehearsal task.
+                </p>
+              </article>
+              <article className="bs-card bs-card-pad bs-docs-card">
+                <span className="bs-panel-label">Beta proof</span>
+                <h2 className="bs-section-title">Social proof coming later.</h2>
+                <p className="bs-feature-copy">
+                  BandSong is currently being tested in real rehearsal and performance workflows. Public testimonials will be added as the beta expands.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section className="bs-section bs-section-tight bs-reveal" data-reveal id="roadmap" aria-labelledby="roadmap-title">
+          <div className="bs-shell">
+            <div className="bs-section-head">
+              <span className="bs-panel-label">Product Roadmap</span>
+              <h2 className="bs-section-title" id="roadmap-title">Where BandSong is heading.</h2>
+              <p className="bs-section-copy">
+                The roadmap starts with the rehearsal and performance workflow that exists now, then moves into future areas that may expand preparation and performance context over time.
+              </p>
+            </div>
+            <div className="bs-roadmap-grid">
+              {roadmapPhases.map((phase) => (
+                <article key={phase.label} className={`bs-card bs-card-pad bs-roadmap-card${phase.future ? ' bs-roadmap-card-future' : ''}`}>
+                  <span className="bs-panel-label bs-panel-label-accent">{phase.label}</span>
+                  <h3 className="bs-feature-title">{phase.title}</h3>
+                  <p className="bs-feature-copy">{phase.copy}</p>
+                  <ul className="bs-list-clean bs-roadmap-list" aria-label={`${phase.label} includes`}>
+                    {phase.bullets.map((bullet) => (
+                      <li key={bullet}>{bullet}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
             </div>
           </div>
         </section>
@@ -884,68 +1221,34 @@ function LandingPage() {
             <p className="bs-footer-product-line">
               BandSong is a musician workflow system for managing songs, setlists, rehearsals, and live performance preparation.
             </p>
-            <p>© {currentYear} BandSong · bandsong.app · hello@bandsong.app</p>
+            <p>&copy; {currentYear} BandSong &middot; bandsong.app &middot; hello@bandsong.app</p>
           </div>
-          <nav className="bs-footer-links" aria-label="Footer">
-            <a className="bs-link bs-focus-ring" href="#features">Features</a>
-            <a className="bs-link bs-focus-ring" href="#how-it-works">Workflow</a>
-            <a className="bs-link bs-focus-ring" href="#import-export">Import/Export</a>
-            <a className="bs-link bs-focus-ring" href="#pricing">Pricing</a>
-            <a className="bs-link bs-focus-ring" href="#beta">Beta</a>
-            <a className="bs-link bs-focus-ring" href="/terms">Terms of Service</a>
-            <a className="bs-link bs-focus-ring" href="/privacy">Privacy Policy</a>
-            <a className="bs-link bs-focus-ring" href="/refund-policy">Refund Policy</a>
-            <a className="bs-link bs-focus-ring" href="mailto:hello@bandsong.app">Contact</a>
+          <nav className="bs-footer-groups" aria-label="Footer">
+            <div className="bs-footer-group">
+              <span className="bs-panel-label">Product</span>
+              <a className="bs-link bs-focus-ring" href="#how-it-works">Workflow</a>
+              <a className="bs-link bs-focus-ring" href="#features">Features</a>
+              <a className="bs-link bs-focus-ring" href="#import-export">Import/Export</a>
+              <a className="bs-link bs-focus-ring" href="#pricing">Pricing</a>
+            </div>
+            <div className="bs-footer-group">
+              <span className="bs-panel-label">Access</span>
+              <a className="bs-link bs-focus-ring" href="#beta">Beta</a>
+              <a className="bs-link bs-focus-ring" href="mailto:hello@bandsong.app" data-track="contact-bandsong">Contact</a>
+              <span className="bs-footer-placeholder">Documentation coming soon</span>
+            </div>
+            <div className="bs-footer-group">
+              <span className="bs-panel-label">Legal</span>
+              <a className="bs-link bs-focus-ring" href="/terms">Terms of Service</a>
+              <a className="bs-link bs-focus-ring" href="/privacy">Privacy Policy</a>
+              <a className="bs-link bs-focus-ring" href="/refund-policy">Refund Policy</a>
+            </div>
           </nav>
         </div>
       </footer>
 
-      <Modal open={betaOpen} title="Join the BandSong Beta" onClose={closeBetaModal}>
-        {betaSuccess ? (
-          <div className="bs-showcase-stack">
-            <p className="bs-section-copy">Your email draft has been prepared for beta signup.</p>
-            <p className="bs-feature-copy">If your mail app did not open, you can still reach us directly at hello@bandsong.app.</p>
-          </div>
-        ) : (
-          <form className="bs-showcase-stack" onSubmit={handleBetaSubmit} noValidate>
-            <div className="bs-form-field">
-              <label className="bs-feature-title" htmlFor="beta-email">
-                Email address
-              </label>
-              <input
-                id="beta-email"
-                className="bs-input bs-focus-ring"
-                type="email"
-                value={email}
-                onChange={(event) => {
-                  setEmail(event.target.value)
-                  if (emailError) {
-                    setEmailError('')
-                  }
-                }}
-                aria-invalid={emailError ? 'true' : 'false'}
-                aria-describedby={emailError ? 'beta-email-error' : undefined}
-                placeholder="you@band.com"
-              />
-              {emailError ? (
-                <p className="bs-form-error" id="beta-email-error">
-                  {emailError}
-                </p>
-              ) : null}
-            </div>
-            <div className="bs-action-row">
-              <button type="submit" className="bs-button bs-button-primary bs-focus-ring">
-                Join the Beta
-              </button>
-              <a
-                className="bs-button bs-button-secondary bs-focus-ring"
-                href="mailto:hello@bandsong.app?subject=BandSong%20Beta"
-              >
-                Email Instead
-              </a>
-            </div>
-          </form>
-        )}
+      <Modal open={betaOpen} title="Request BandSong Beta Access" onClose={closeBetaModal}>
+        <BetaAccessForm idPrefix="beta-modal" />
       </Modal>
 
       <Modal open={galleryOpen} title="BandSong Suite Product Gallery" onClose={() => setGalleryOpen(false)}>
@@ -1001,9 +1304,5 @@ function LandingPage() {
 }
 
 export default LandingPage
-
-
-
-
 
 
